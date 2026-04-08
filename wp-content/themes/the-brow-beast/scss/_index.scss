@@ -1,0 +1,11 @@
+// ─── The Brow Beast — Shared Forwarding Index ───────────────────
+// Every partial imports this one file to get tokens + mixins:
+//
+//   @use '../index' as *;   (from components/)
+//   @use 'index' as *;      (from root scss/)
+//
+// @forward makes the members of each file available to
+// whoever @use's THIS file — nothing leaks further than intended.
+
+@forward 'tokens';
+@forward 'mixins';
