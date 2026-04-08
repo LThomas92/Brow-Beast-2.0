@@ -1,0 +1,418 @@
+@use '../index' as *;
+
+.hero {
+  background: $cream;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 560px;
+}
+
+.hero-text {
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
+}
+
+.hero-headline {
+  font-family: $font-serif;
+  font-size: 60px;
+  font-weight: 300;
+  line-height: 1.05;
+  color: $deep-brown;
+
+  em {
+    font-style: italic;
+    color: $light-brown;
+  }
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: $muted-text;
+  line-height: 1.8;
+  max-width: 340px;
+  font-weight: 300;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* ── Hero image column ─────────────────────────────────────────
+   Stack order (bottom → top):
+     1. <img>            — the real photo, covers the full column
+     2. ::after          — the brand gradient on top of the photo
+     3. .hero-deco rings — decorative circles
+     4. .hero-image-label — caption pill at bottom-left
+   ─────────────────────────────────────────────────────────────── */
+.hero-image {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 28px;
+
+  background: linear-gradient(150deg, $blush 0%, $warm-tan 55%, $brown 100%);
+
+  // Gradient overlay layered ON TOP of the photo.
+  // opacity controls how strongly the brand colours bleed through.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(150deg, $blush 0%, $warm-tan 55%, $brown 100%);
+    opacity: 0.45;   // ← lower = more photo, higher = more gradient
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // The actual <img> — sits beneath the gradient overlay
+  &-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;  // keeps face in frame on all sizes
+    z-index: 0;
+  }
+}
+
+// Everything inside .hero-image that needs to sit ABOVE the gradient
+// .hero-deco,
+// .hero-deco-inner,
+.hero-image-label {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-image-label {
+  background: rgba(250, 249, 246, 0.92);
+  padding: 12px 18px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $deep-brown;
+}
+
+/* ── STATS ── */
+.stats-bar {
+  background: $deep-brown;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 32px 80px;
+}
+
+.stat {
+  text-align: center;
+  border-right: 0.5px solid rgba(255, 255, 255, 0.12);
+  padding: 0 24px;
+
+  &:last-child { border-right: none; }
+}
+
+.stat-num {
+  font-family: $font-serif;
+  font-size: 38px;
+  color: $gold;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 6px;
+}
+
+/* ── SERVICES ── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.svc-card {
+  background: $white;
+  overflow: hidden;
+  transition: transform 0.2s;
+  cursor: pointer;
+
+  &:hover { transform: translateY(-3px); }
+}
+
+.svc-img {
+  height: 180px;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+    &.has-image {
+    .svc-img-fill { 
+      display: none; 
+    }
+  }
+}
+
+.svc-img-fill {
+   width: 100%;
+   height: 100%; 
+}
+
+.si-1 { background: linear-gradient(140deg, #D4B896, #896C54); }
+.si-2 { background: linear-gradient(140deg, #E8D5C4, #B06F44); }
+.si-3 { background: linear-gradient(140deg, #C9A882, #5C3D2E); }
+.si-4 { background: linear-gradient(140deg, #F2EAE0, #C9A882); }
+
+.svc-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(250, 249, 246, 0.9);
+  padding: 4px 10px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $deep-brown;
+}
+
+.svc-info { padding: 18px; }
+
+.svc-name {
+  font-family: $font-serif;
+  font-size: 17px;
+  color: $deep-brown;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.svc-desc {
+  font-size: 11px;
+  color: $muted-text;
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
+.svc-price {
+  font-size: 11px;
+  color: $light-brown;
+  margin-top: 10px;
+  letter-spacing: 1px;
+}
+
+/* ── QUOTE ── */
+.quote-section {
+  background: $cream;
+  padding: 72px 60px;
+  text-align: center;
+}
+
+.quote-line {
+  width: 40px;
+  height: 0.5px;
+  background: $warm-tan;
+  margin: 18px auto;
+}
+
+.quote-text {
+  font-family: $font-serif;
+  font-size: 30px;
+  font-style: italic;
+  color: $deep-brown;
+  font-weight: 300;
+  line-height: 1.5;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.quote-author {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: $light-brown;
+}
+
+/* ── GALLERY STRIP ── */
+.gallery-strip {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 10px;
+  height: 340px;
+}
+
+.gallery-cell {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery-sub {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  height: 340px;
+}
+
+.gf {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s;
+}
+
+.gallery-cell:hover .gf { transform: scale(1.03); }
+
+.g1 { background: linear-gradient(160deg, #D4B896, #896C54); }
+.g2 { background: linear-gradient(140deg, #E8D5C4, #B06F44); }
+.g3 { background: linear-gradient(150deg, #C9A882, #5C3D2E); }
+.g4 { background: linear-gradient(130deg, #F2EAE0, #7A5C40); }
+
+.gallery-cell-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(44, 28, 16, 0);
+  display: flex;
+  align-items: flex-end;
+  padding: 14px;
+  transition: background 0.25s;
+}
+
+.gallery-cell:hover .gallery-cell-overlay { background: rgba(44, 28, 16, 0.28); }
+
+.gallery-cell-tag {
+  background: rgba(250, 249, 246, 0.92);
+  padding: 5px 12px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $deep-brown;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.2s;
+}
+
+.gallery-cell:hover .gallery-cell-tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── TESTIMONIALS ── */
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.testi-card {
+  border-top: 2px solid $warm-tan;
+  padding-top: 20px;
+}
+
+.testi-stars {
+  color: $gold;
+  letter-spacing: 3px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.testi-text {
+  font-size: 13px;
+  color: $muted-text;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.testi-name {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $brown;
+  margin-top: 16px;
+}
+
+/* ── INSTAGRAM ── */
+.insta-handle {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: $light-brown;
+  margin-bottom: 8px;
+}
+
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-top: 28px;
+}
+
+.insta-cell {
+  aspect-ratio: 1;
+  overflow: hidden;
+  cursor: pointer;
+
+  > div {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.25s;
+  }
+
+  &:hover > div { transform: scale(1.05); }
+}
+
+.ig1 { background: linear-gradient(135deg, #C9A882, #896C54); }
+.ig2 { background: linear-gradient(135deg, #E8D5C4, #B06F44); }
+.ig3 { background: linear-gradient(150deg, #F2EAE0, #C9A882); }
+.ig4 { background: linear-gradient(140deg, #D4B896, #5C3D2E); }
+.ig5 { background: linear-gradient(160deg, #ddc9b5, #B06F44); }
+.ig6 { background: linear-gradient(130deg, #F2EAE0, #7A5C40); }
+
+/* ── CTA BANNER ── */
+.cta-banner {
+  background: $deep-brown;
+  padding: 64px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.cta-title {
+  font-family: $font-serif;
+  font-size: 40px;
+  font-weight: 300;
+  color: $gold;
+  line-height: 1.1;
+
+  em { font-style: italic; }
+}
+
+.cta-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 10px;
+  max-width: 400px;
+  line-height: 1.7;
+}
+
+.btn-gold {
+  background: $gold;
+  color: $deep-brown;
+  padding: 15px 32px;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s;
+
+  &:hover {
+     background: $warm-tan; 
+    }
+}

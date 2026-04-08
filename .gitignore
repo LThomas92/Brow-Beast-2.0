@@ -1,0 +1,32 @@
+# ── Node ──────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# ── Build output ──────────────────────────────────────────────────
+# Webpack generates these — rebuilt on every deploy, not source-controlled
+dist/
+
+# ── Environment & secrets ─────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── OS files ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor ────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ── Sass cache ────────────────────────────────────────────────────
+.sass-cache/
+*.css.map
+*.js.map
+
+# ── Ht Access ────────────────────────────────────────────────────
+.htacess

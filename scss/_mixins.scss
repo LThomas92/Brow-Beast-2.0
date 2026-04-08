@@ -1,0 +1,144 @@
+// ─── The Brow Beast — Mixins ────────────────────────────────────
+// @use 'index' as *;  ← use this in partials, not this file directly.
+//
+// Dart Sass 3.0 removes all global built-in functions.
+// Always use namespaced built-ins:
+//   map-get()   → sass:map   → map.get()
+//   lighten()   → sass:color → color.adjust()
+//   percentage()→ sass:math  → math.percentage()
+
+@use 'tokens'   as *;
+@use 'sass:map';
+@use 'sass:math';
+
+// ── Responsive: mobile-first ─────────────────────────────────────
+@mixin above( $bp ) {
+  $val: map.get( $breakpoints, $bp );
+  @if $val {
+    @media ( min-width: $val ) { @content; }
+  } @else {
+    @warn 'Unknown breakpoint `#{$bp}`. Available: #{map.keys($breakpoints)}';
+  }
+}
+
+// max-width — subtract 0.02px to avoid collision at exact boundary
+@mixin below( $bp ) {
+  $val: map.get( $breakpoints, $bp );
+  @if $val {
+    @media ( max-width: ( $val - 0.02px ) ) { @content; }
+  } @else {
+    @warn 'Unknown breakpoint `#{$bp}`. Available: #{map.keys($breakpoints)}';
+  }
+}
+
+// ── Uppercase micro-label ────────────────────────────────────────
+@mixin micro-label( $color: $light-brown ) {
+  font-family:    $font-sans;
+  font-size:      10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight:    400;
+  color:          $color;
+}
+
+// ── Serif display heading ────────────────────────────────────────
+@mixin display-heading( $size: 48px ) {
+  font-family: $font-serif;
+  font-size:   $size;
+  font-weight: 300;
+  line-height: 1.05;
+  color:       $deep-brown;
+
+  em {
+    font-style: italic;
+    color:      $light-brown;
+  }
+}
+
+// ── Accessible visually-hidden ───────────────────────────────────
+@mixin sr-only {
+  position:    absolute;
+  width:       1px;
+  height:      1px;
+  padding:     0;
+  margin:      -1px;
+  overflow:    hidden;
+  clip:        rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border:      0;
+}
+
+// ── Subtle hover lift ────────────────────────────────────────────
+@mixin hover-lift {
+  transition: transform $transition-base;
+  &:hover { transform: translateY(-3px); }
+}
+
+// ── Gold rule divider ────────────────────────────────────────────
+@mixin gold-rule( $width: 44px ) {
+  display:    block;
+  width:      $width;
+  height:     2px;
+  background: $gold;
+}
+
+// ── Aspect ratio container ───────────────────────────────────────
+@mixin aspect( $w: 4, $h: 3 ) {
+  aspect-ratio: math.div( $w, $h );
+  overflow:     hidden;
+}
+
+// ── Truncate single line ─────────────────────────────────────────
+@mixin truncate {
+  overflow:      hidden;
+  white-space:   nowrap;
+  text-overflow: ellipsis;
+}
+
+// ── Keyboard focus ring ──────────────────────────────────────────
+@mixin focus-ring( $color: $light-brown ) {
+  &:focus-visible {
+    outline:        2px solid $color;
+    outline-offset: 3px;
+  }
+}
+
+@mixin for-size($size) {
+    @if $size == mobile {
+      @media (max-width: $mobile_max) { @content; }
+    } @else if $size == tablet {
+      @media (min-width: $tablet_min) and (max-width: $tablet_max) { @content; }
+    } @else if $size == desktop {
+      @media (min-width: $desktop_min) { @content; }
+    } @else if $size == no-mobile {
+      @media (min-width: $tablet_min) { @content; }
+    } @else if $size == no-desktop {
+      @media (max-width: $tablet_max) { @content; }
+    } @else if $size == widescreen {
+      @media (min-width: $widescreen_min) { @content; }
+    }
+  }
+  
+  @mixin content-margins {
+    width: calc(100vw - calc(#{$content_desktop_margins} * 2));
+    max-width: $content_desktop_max_width;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    @include for-size(widescreen) {
+      max-width: $content_widescreen_max_width;
+    } @include for-size(mobile) {
+      width: calc(100vw - calc(#{$content_mobile_margins} * 2));
+    }
+  }
+  
+  @mixin container-margins {
+    width: calc(100vw - calc(#{$container_desktop_margins} * 2));
+    max-width: $container_desktop_max_width;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    @include for-size(widescreen) {
+      max-width: $container_widescreen_max_width;
+    } @include for-size(mobile) {
+      width: calc(100vw - calc(#{$container_mobile_margins} * 2));
+    }
+  }
