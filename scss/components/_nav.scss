@@ -113,60 +113,6 @@
   }
 }
 
-// ── Search dropdown ───────────────────────────────────────────────
-.search-dropdown {
-  display: none;
-  position: absolute;
-  top: calc(100% + 0.5px);
-  left: 0; right: 0;
-  background: $white;
-  border-bottom: 0.5px solid $blush;
-  padding: 24px 48px;
-  z-index: 99;
-
-  &.open { display: block; }
-}
-
-.sd-label { @include micro-label($warm-tan); margin-bottom: 12px; }
-
-.sd-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.sd-tag {
-  padding: 6px 14px;
-  border: 0.5px solid $blush;
-  font-size: 10px;
-  color: $brown;
-  letter-spacing: 1px;
-  cursor: pointer;
-  background: transparent;
-  transition: background $transition-fast;
-
-  &:hover { background: $cream; }
-}
-
-.sd-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 10px 0;
-  border-bottom: 0.5px solid $blush;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background $transition-fast;
-
-  &:last-child { border-bottom: none; }
-  &:hover { background: $cream; }
-}
-
-.sd-thumb { width: 44px; height: 44px; flex-shrink: 0; background: $blush; }
-.sd-name  { font-family: $font-serif; font-size: 15px; color: $deep-brown; }
-.sd-cat   { font-size: 10px; color: $muted-text; letter-spacing: 1px; margin-top: 2px; }
-
 // ── Book Now pill ─────────────────────────────────────────────────
 .nav-book {
   background: $deep-brown;

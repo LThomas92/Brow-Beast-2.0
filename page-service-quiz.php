@@ -1,6 +1,23 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Template Name: Brow Quiz
+ */
+get_header();
+
+$booking_url = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' );
+$services_url = get_permalink( get_page_by_path( 'services' ) ) ?: home_url( '/services/' );
+
+// Service page URLs for result book buttons
+$service_urls = [
+  'henna'       => get_permalink( get_page_by_path( 'henna-brows' ) )              ?: $booking_url,
+  'strokeblend' => get_permalink( get_page_by_path( 'strokeblend-combo-brows' ) )  ?: $booking_url,
+  'softblend'   => get_permalink( get_page_by_path( 'softblend-ombre-brows' ) )    ?: $booking_url,
+  'waxing'      => get_permalink( get_page_by_path( 'brow-waxing' ) )              ?: $booking_url,
+];
+?>
 
 <div class="quiz-page">
+
   <div class="quiz-header">
     <div class="tag">3-question quiz</div>
     <h1 class="quiz-headline">Find your <em>perfect brow</em></h1>
@@ -35,8 +52,8 @@
       </div>
     </div>
     <div class="quiz-nav">
-      <button class="quiz-back" style="visibility:hidden;">Back</button>
-      <button class="quiz-next" id="next0">Continue →</button>
+      <button class="quiz-back" id="back0" type="button" style="visibility:hidden;">← Back</button>
+      <button class="quiz-next" id="next0" type="button">Continue →</button>
     </div>
   </div>
 
@@ -62,8 +79,8 @@
       </div>
     </div>
     <div class="quiz-nav">
-      <button class="quiz-back" onclick="goTo(0)">← Back</button>
-      <button class="quiz-next" id="next1">Continue →</button>
+      <button class="quiz-back" id="back1" type="button">← Back</button>
+      <button class="quiz-next" id="next1" type="button">Continue →</button>
     </div>
   </div>
 
@@ -89,13 +106,13 @@
       </div>
     </div>
     <div class="quiz-nav">
-      <button class="quiz-back" onclick="goTo(1)">← Back</button>
-      <button class="quiz-next" id="next2" onclick="showResult()">See My Result →</button>
+      <button class="quiz-back" id="back2" type="button">← Back</button>
+      <button class="quiz-next" id="next2" type="button">See My Result →</button>
     </div>
   </div>
 
   <!-- RESULT -->
-  <div class="quiz-result" id="quizResult">
+  <div class="quiz-result" id="quizResult" style="display:none;">
     <div class="result-card">
       <div class="result-img" id="resultImg"></div>
       <div class="result-body">
@@ -104,126 +121,195 @@
         <p class="result-desc" id="resultDesc"></p>
         <div class="result-details" id="resultDetails"></div>
         <div class="result-btns">
-          <a href="booking.html" class="btn-primary" id="resultBookBtn">Book This Service</a>
-          <button class="quiz-retake" onclick="retakeQuiz()">Retake Quiz</button>
+          <a href="#" class="btn-primary" id="resultBookBtn">Book This Service</a>
+          <button class="quiz-retake" id="retakeBtn" type="button">Retake Quiz</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+</div><!-- .quiz-page -->
 
 <script>
-  const answers = {};
-  let currentStep = 0;
+(function() {
+  'use strict';
 
-  const results = {
+  // ── Service URLs from PHP ─────────────────────────────────────
+  var SERVICE_URLS = {
+    henna:       '<?php echo esc_js( $service_urls['henna'] ); ?>',
+    strokeblend: '<?php echo esc_js( $service_urls['strokeblend'] ); ?>',
+    softblend:   '<?php echo esc_js( $service_urls['softblend'] ); ?>',
+    waxing:      '<?php echo esc_js( $service_urls['waxing'] ); ?>',
+  };
+
+  var BOOKING_URL = '<?php echo esc_js( $booking_url ); ?>';
+
+  // ── State ─────────────────────────────────────────────────────
+  var answers     = { skin: null, maintenance: null, look: null };
+  var currentStep = 0;
+  var KEY_MAP     = ['skin', 'maintenance', 'look'];
+
+  // ── Results data ──────────────────────────────────────────────
+  var results = {
     henna: {
-      name: '<em>Henna Brows</em>',
-      desc: 'Based on your answers, Henna Brows are your ideal starting point. Natural plant-based pigment gives you beautiful color and definition for up to 2 weeks with zero downtime — perfect if you want a low-commitment, gorgeous result that suits sensitive skin.',
-      duration: '60 min',
+      name:      'Henna Brows',
+      nameHtml:  '<em>Henna Brows</em>',
+      desc:      'Based on your answers, Henna Brows are your ideal starting point. Natural plant-based pigment gives you beautiful colour and definition for up to 2 weeks with zero downtime — perfect for sensitive skin or a commitment-free first step.',
+      duration:  '60 min',
       longevity: 'Up to 2 weeks',
-      price: 'From $75',
-      gradient: 'linear-gradient(140deg,#E8D5C4,#C9A882)',
+      price:     'From $75',
+      gradient:  'linear-gradient(140deg,#E8D5C4,#C9A882)',
     },
     strokeblend: {
-      name: 'StrokeBlend™ <em>Combo Brows</em>',
-      desc: 'Your answers point to StrokeBlend™ — Gabrielle\'s signature semi-permanent technique that combines hair strokes with powder shading. The result is incredibly natural-looking brows with lasting dimension. Wake up with perfect brows every single day.',
-      duration: '2–2.5 hrs',
+      name:      'StrokeBlend™ Combo Brows',
+      nameHtml:  'StrokeBlend™ <em>Combo Brows</em>',
+      desc:      'Your answers point to StrokeBlend™ — Gabrielle\'s signature semi-permanent technique combining hair strokes with powder shading. The result is incredibly natural-looking brows with lasting dimension. Wake up with perfect brows every single day.',
+      duration:  '2–2.5 hrs',
       longevity: '12–18 months',
-      price: 'From $350',
-      gradient: 'linear-gradient(140deg,#D4B896,#896C54)',
+      price:     'From $350',
+      gradient:  'linear-gradient(140deg,#D4B896,#896C54)',
     },
     softblend: {
-      name: 'SoftBlend™ <em>Ombré Brows</em>',
-      desc: 'Your lifestyle and look preferences are a perfect match for SoftBlend™ Ombré Brows. A soft powdered gradient that starts lighter at the head and deepens at the tail — bold, defined, and effortlessly beautiful with semi-permanent staying power.',
-      duration: '2 hrs',
+      name:      'SoftBlend™ Ombré Brows',
+      nameHtml:  'SoftBlend™ <em>Ombré Brows</em>',
+      desc:      'Your lifestyle and look preferences are a perfect match for SoftBlend™ Ombré Brows. A soft powdered gradient that starts lighter at the head and deepens at the tail — bold, defined, and effortlessly beautiful with semi-permanent staying power.',
+      duration:  '2 hrs',
       longevity: '12–18 months',
-      price: 'From $300',
-      gradient: 'linear-gradient(140deg,#C9A882,#5C3D2E)',
+      price:     'From $300',
+      gradient:  'linear-gradient(140deg,#C9A882,#5C3D2E)',
     },
     waxing: {
-      name: 'Brow Waxing <em>&amp; Shaping</em>',
-      desc: 'For you, precision waxing and shaping is the perfect match. Gabrielle\'s expert eye for shape and symmetry will define your natural brow architecture — clean, polished, and ready for your own makeup routine.',
-      duration: '30 min',
+      name:      'Brow Waxing & Shaping',
+      nameHtml:  'Brow Waxing <em>&amp; Shaping</em>',
+      desc:      'For you, precision waxing and shaping is the perfect match. Gabrielle\'s expert eye for shape and symmetry will define your natural brow architecture — clean, polished, and ready for your makeup routine.',
+      duration:  '30 min',
       longevity: '3–4 weeks',
-      price: 'From $35',
-      gradient: 'linear-gradient(140deg,#F2EAE0,#C9A882)',
+      price:     'From $35',
+      gradient:  'linear-gradient(140deg,#F2EAE0,#C9A882)',
     },
   };
 
-  function getResult() {
-    const { skin, maintenance, look } = answers;
-    if (skin === 'sensitive' || maintenance === 'little') return 'henna';
-    if (maintenance === 'none' && look === 'natural') return 'strokeblend';
-    if (maintenance === 'none' && look === 'defined') return 'softblend';
-    if (maintenance === 'none' && look === 'both') return 'strokeblend';
-    if (look === 'natural') return 'strokeblend';
-    if (look === 'defined') return 'softblend';
-    return 'strokeblend';
+  // ── Result logic ──────────────────────────────────────────────
+  function getResultKey() {
+    var skin        = answers.skin;
+    var maintenance = answers.maintenance;
+    var look        = answers.look;
+
+    if ( skin === 'sensitive' )                             return 'henna';
+    if ( maintenance === 'little' )                        return 'henna';
+    if ( maintenance === 'none' && look === 'defined' )    return 'softblend';
+    if ( maintenance === 'none' )                          return 'strokeblend';
+    if ( look === 'defined' )                              return 'softblend';
+    if ( look === 'natural' || look === 'both' )           return 'strokeblend';
+    return 'strokeblend'; // default
   }
 
-  function goTo(step) {
-    document.getElementById(`step${currentStep}`).classList.remove('active');
+  // ── Navigation ────────────────────────────────────────────────
+  function goTo( step ) {
+    document.getElementById( 'step' + currentStep ).classList.remove( 'active' );
     currentStep = step;
-    document.getElementById(`step${step}`).classList.add('active');
-    updateProgress(step);
-    window.scrollTo({ top: 200, behavior: 'smooth' });
+    document.getElementById( 'step' + step ).classList.add( 'active' );
+    updateProgress( step );
+    window.scrollTo( { top: 0, behavior: 'smooth' } );
   }
 
-  function updateProgress(step) {
-    for (let i = 0; i < 3; i++) {
-      const dot = document.getElementById(`dot${i}`);
+  function updateProgress( step ) {
+    for ( var i = 0; i < 3; i++ ) {
+      var dot = document.getElementById( 'dot' + i );
       dot.className = 'progress-dot';
-      if (i < step) dot.classList.add('done');
-      else if (i === step) dot.classList.add('active');
+      if ( i < step )       dot.classList.add( 'done' );
+      else if ( i === step ) dot.classList.add( 'active' );
     }
   }
 
+  // ── Show result ───────────────────────────────────────────────
   function showResult() {
-    document.getElementById(`step2`).style.display = 'none';
-    document.getElementById('quizProgress').style.display = 'none';
-    const r = results[getResult()];
-    document.getElementById('resultImg').style.background = r.gradient;
-    document.getElementById('resultName').innerHTML = r.name;
-    document.getElementById('resultDesc').textContent = r.desc;
-    document.getElementById('resultDetails').innerHTML = `
-      <div class="result-detail-item"><div class="detail-label">Duration</div><div class="detail-val">${r.duration}</div></div>
-      <div class="result-detail-item"><div class="detail-label">Results last</div><div class="detail-val">${r.longevity}</div></div>
-      <div class="result-detail-item"><div class="detail-label">Starting from</div><div class="detail-val">${r.price}</div></div>
-    `;
-    document.getElementById('quizResult').style.display = 'block';
-    window.scrollTo({ top: 200, behavior: 'smooth' });
+    var key = getResultKey();
+    var r   = results[ key ];
+
+    // Hide quiz panels
+    for ( var i = 0; i < 3; i++ ) {
+      document.getElementById( 'step' + i ).classList.remove( 'active' );
+    }
+    document.getElementById( 'quizProgress' ).style.display = 'none';
+
+    // Populate result card
+    document.getElementById( 'resultImg' ).style.background  = r.gradient;
+    document.getElementById( 'resultName' ).innerHTML        = r.nameHtml;
+    document.getElementById( 'resultDesc' ).textContent      = r.desc;
+    document.getElementById( 'resultDetails' ).innerHTML     =
+      '<div class="result-detail-item"><div class="detail-label">Duration</div><div class="detail-val">' + r.duration + '</div></div>' +
+      '<div class="result-detail-item"><div class="detail-label">Results last</div><div class="detail-val">' + r.longevity + '</div></div>' +
+      '<div class="result-detail-item"><div class="detail-label">Starting from</div><div class="detail-val">' + r.price + '</div></div>';
+
+    // Book button — links to the individual service page
+    var bookBtn = document.getElementById( 'resultBookBtn' );
+    bookBtn.href        = SERVICE_URLS[ key ] || BOOKING_URL;
+    bookBtn.textContent = 'Book ' + r.name;
+
+    document.getElementById( 'quizResult' ).style.display = 'block';
+    window.scrollTo( { top: 0, behavior: 'smooth' } );
   }
 
+  // ── Retake ────────────────────────────────────────────────────
   function retakeQuiz() {
-    Object.keys(answers).forEach(k => delete answers[k]);
-    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
-    document.querySelectorAll('.quiz-next').forEach(b => b.classList.remove('enabled'));
-    document.getElementById('quizResult').style.display = 'none';
-    document.getElementById('step2').style.display = '';
-    document.getElementById('quizProgress').style.display = '';
-    goTo(0);
+    answers = { skin: null, maintenance: null, look: null };
+
+    document.querySelectorAll( '.quiz-option' ).forEach( function(o) { o.classList.remove( 'selected' ); } );
+    document.querySelectorAll( '.quiz-next' ).forEach( function(b) { b.classList.remove( 'enabled' ); } );
+
+    document.getElementById( 'quizResult' ).style.display   = 'none';
+    document.getElementById( 'quizProgress' ).style.display = '';
+    currentStep = 0;
+
+    // Ensure all steps are hidden then show step 0
+    for ( var i = 0; i < 3; i++ ) {
+      document.getElementById( 'step' + i ).classList.remove( 'active' );
+    }
+    document.getElementById( 'step0' ).classList.add( 'active' );
+    updateProgress( 0 );
+    window.scrollTo( { top: 0, behavior: 'smooth' } );
   }
 
-  // Option selection
-  document.querySelectorAll('.quiz-step').forEach((card, stepIdx) => {
-    card.querySelectorAll('.quiz-option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        card.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        const keyMap = ['skin','maintenance','look'];
-        answers[keyMap[stepIdx]] = opt.dataset.val;
-        document.getElementById(`next${stepIdx}`).classList.add('enabled');
-      });
-    });
-  });
+  // ── Wire up option clicks ─────────────────────────────────────
+  document.querySelectorAll( '.quiz-step' ).forEach( function( card, stepIdx ) {
+    card.querySelectorAll( '.quiz-option' ).forEach( function( opt ) {
+      opt.addEventListener( 'click', function() {
+        // Deselect all options in this step
+        card.querySelectorAll( '.quiz-option' ).forEach( function(o) { o.classList.remove( 'selected' ); } );
+        opt.classList.add( 'selected' );
 
-  // Next buttons
-  for (let i = 0; i < 2; i++) {
-    document.getElementById(`next${i}`).addEventListener('click', () => {
-      if (document.getElementById(`next${i}`).classList.contains('enabled')) goTo(i + 1);
-    });
-  }
+        // Save answer
+        answers[ KEY_MAP[ stepIdx ] ] = opt.getAttribute( 'data-val' );
+
+        // Enable the next/continue button
+        var nextBtn = document.getElementById( 'next' + stepIdx );
+        if ( nextBtn ) nextBtn.classList.add( 'enabled' );
+      } );
+    } );
+  } );
+
+  // ── Wire up next buttons ──────────────────────────────────────
+  document.getElementById( 'next0' ).addEventListener( 'click', function() {
+    if ( answers.skin ) goTo( 1 );
+  } );
+
+  document.getElementById( 'next1' ).addEventListener( 'click', function() {
+    if ( answers.maintenance ) goTo( 2 );
+  } );
+
+  document.getElementById( 'next2' ).addEventListener( 'click', function() {
+    if ( answers.look ) showResult();
+  } );
+
+  // ── Wire up back buttons ──────────────────────────────────────
+  document.getElementById( 'back1' ).addEventListener( 'click', function() { goTo( 0 ); } );
+  document.getElementById( 'back2' ).addEventListener( 'click', function() { goTo( 1 ); } );
+
+  // ── Wire up retake button ─────────────────────────────────────
+  document.getElementById( 'retakeBtn' ).addEventListener( 'click', retakeQuiz );
+
+})();
 </script>
 
 <?php get_footer(); ?>

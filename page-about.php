@@ -23,7 +23,10 @@
 </section>
 
 <section class="section story-section">
-  <div class="story-img">
+  <?php 
+    $studio_image = get_field('about_studio_image');
+  ?>
+  <div class="story-img" <?php if ( $studio_image ) : ?> style="background-image: url('<?php echo esc_url( $studio_image['url'] ); ?>');"<?php endif; ?>>
     <div class="story-img-tag">In the Studio</div>
   </div>
   <div class="story-text">

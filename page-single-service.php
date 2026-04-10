@@ -100,7 +100,7 @@ $gallery    = get_field( 'service_gallery' )    ?: [];
     <div class="tag" style="margin-bottom:8px;">Is this right for me?</div>
     <h2 class="sec-title">Ideal <em>for you if…</em></h2>
     <p class="single-svc-ideal-text"><?php echo esc_html( $ideal_for ); ?></p>
-    <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'brow-quiz' ) ) ); ?>" class="btn-ghost">
+    <a href="<?php echo esc_url( get_permalink( get_page_by_path( '/service-quiz' ) ) ); ?>" class="btn-ghost">
       Take the Brow Quiz
     </a>
   </div>

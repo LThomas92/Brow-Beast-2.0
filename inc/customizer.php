@@ -56,6 +56,12 @@ function brow_beast_2_0_customize_partial_blogdescription() {
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function brow_beast_2_0_customize_preview_js() {
-	wp_enqueue_script( 'brow-beast-2-0-customizer', get_template_directory_uri() . '/js/customizer.js', array( 'customize-preview' ), _S_VERSION, true );
+wp_enqueue_script(
+    'browbeast-customizer',
+    get_template_directory_uri() . '/js/customizer.js',
+    array( 'customize-preview' ),
+    BROWBEAST_VERSION,
+    true
+);
 }
 add_action( 'customize_preview_init', 'brow_beast_2_0_customize_preview_js' );

@@ -66,7 +66,7 @@ $services = $acf_services ?: [
     <div class="quiz-link-bar">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#896C54" stroke-width="1.2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v1.5M10 9.5c0-1 1.5-1.5 1.5-3a2.5 2.5 0 00-5 0"/><circle cx="10" cy="14" r=".8" fill="#896C54"/></svg>
       <div class="quiz-link-text">Not sure which service is right for you?</div>
-      <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'brow-quiz' ) ) ?: home_url('/brow-quiz/') ); ?>" class="quiz-link-cta">Take the quiz</a>
+      <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'service-quiz' ) ) ?: home_url('/service-quiz/') ); ?>" class="quiz-link-cta">Take the quiz</a>
     </div>
 
     <!-- ── PANEL 1: Service selector ─────────────────────────── -->

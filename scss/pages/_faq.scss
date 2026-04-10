@@ -1,0 +1,235 @@
+@use '../index' as *;
+
+// ══════════════════════════════════════════════════════════════════
+//  FAQ PAGE
+// ══════════════════════════════════════════════════════════════════
+
+// ── Hero ──────────────────────────────────────────────────────────
+.faq-hero {
+  background: $cream;
+  padding: 72px 60px 56px;
+  border-bottom: 0.5px solid $blush;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+
+  @include below('lg') {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 48px 24px 40px;
+  }
+}
+
+.faq-headline {
+  font-family: $font-serif;
+  font-size: 52px;
+  font-weight: 300;
+  color: $deep-brown;
+  line-height: 1.05;
+  margin: 12px 0 16px;
+}
+
+.faq-sub {
+  font-size: 14px;
+  color: $muted-text;
+  line-height: 1.8;
+  font-weight: 300;
+  max-width: 480px;
+}
+
+// ── Jump nav ──────────────────────────────────────────────────────
+.faq-jump-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.faq-jump-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-size: 13px;
+  color: $muted-text;
+  border: 0.5px solid transparent;
+  transition: all $transition-fast;
+
+  &:hover {
+    color: $brown;
+    border-color: $blush;
+    background: $off-white;
+  }
+
+  &.active {
+    color: $deep-brown;
+    border-color: $warm-tan;
+    background: $off-white;
+
+    .faq-jump-icon { color: $light-brown; }
+  }
+}
+
+.faq-jump-icon {
+  font-size: 14px;
+  color: $warm-tan;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+// ── Page layout ───────────────────────────────────────────────────
+.faq-page-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+// ── Category block ────────────────────────────────────────────────
+.faq-category {
+  scroll-margin-top: 90px; // offset for sticky nav
+}
+
+.faq-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 0.5px solid $blush;
+}
+
+.faq-cat-icon {
+  width: 40px;
+  height: 40px;
+  background: $cream;
+  border: 0.5px solid $blush;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: $light-brown;
+  flex-shrink: 0;
+}
+
+.faq-cat-title {
+  font-family: $font-serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: $deep-brown;
+}
+
+// ── FAQ accordion list ────────────────────────────────────────────
+.faq-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-item {
+  border-bottom: 0.5px solid $blush;
+
+  &:first-child { border-top: 0.5px solid $blush; }
+}
+
+.faq-q {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: $font-sans;
+  font-size: 15px;
+  color: $deep-brown;
+  text-align: left;
+  transition: color $transition-fast;
+
+  span { flex: 1; }
+
+  &:hover { color: $light-brown; }
+
+  &[aria-expanded="true"] {
+    color: $light-brown;
+
+    .faq-chevron {
+      transform: rotate(180deg);
+      color: $light-brown;
+    }
+  }
+}
+
+.faq-chevron {
+  flex-shrink: 0;
+  color: $warm-tan;
+  transition: transform $transition-base, color $transition-fast;
+}
+
+// Answer panel — max-height accordion
+// !important on overflow ensures no parent or utility class overrides it
+.faq-item .faq-a {
+  overflow: hidden !important;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+  // Ensure no padding/margin on the wrapper itself bleeds out
+  padding: 0;
+  margin: 0;
+}
+
+.faq-item .faq-a-inner {
+  // All padding lives here inside the clipped container
+  padding: 4px 0 22px;
+  font-size: 14px;
+  color: $muted-text;
+  line-height: 1.8;
+  max-width: 720px;
+}
+
+// ── Still have questions CTA ──────────────────────────────────────
+.faq-contact-cta {
+  background: $deep-brown;
+  padding: 72px 60px;
+
+  @include below('md') { padding: 48px 24px; }
+}
+
+.faq-cta-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+
+  @include below('lg') {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+}
+
+.faq-cta-text {
+  h2 {
+    font-family: $font-serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: $gold;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.7;
+    max-width: 420px;
+  }
+}
+
+.faq-cta-actions {
+  display: flex;
+  gap: 14px;
+  flex-shrink: 0;
+
+  @include below('sm') { flex-direction: column; }
+}
