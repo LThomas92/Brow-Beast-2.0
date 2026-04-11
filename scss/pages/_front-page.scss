@@ -1,10 +1,17 @@
+// ─── Homepage ────────────────────────────────────────────────────
 @use '../index' as *;
 
+// ── Hero ──────────────────────────────────────────────────────────
 .hero {
   background: $cream;
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 560px;
+
+  @include below('lg') {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
 }
 
 .hero-text {
@@ -13,6 +20,9 @@
   flex-direction: column;
   justify-content: center;
   gap: 22px;
+
+  @include below('lg') { padding: 56px 40px; }
+  @include below('sm') { padding: 40px 24px; gap: 16px; }
 }
 
 .hero-headline {
@@ -22,10 +32,11 @@
   line-height: 1.05;
   color: $deep-brown;
 
-  em {
-    font-style: italic;
-    color: $light-brown;
-  }
+  em { font-style: italic; color: $light-brown; }
+
+  @include below('lg') { font-size: 48px; }
+  @include below('md') { font-size: 40px; }
+  @include below('sm') { font-size: 34px; }
 }
 
 .hero-sub {
@@ -34,6 +45,8 @@
   line-height: 1.8;
   max-width: 340px;
   font-weight: 300;
+
+  @include below('sm') { max-width: 100%; font-size: 13px; }
 }
 
 .hero-btns {
@@ -41,71 +54,67 @@
   gap: 14px;
   align-items: center;
   margin-top: 8px;
+  flex-wrap: wrap;
+
+  @include below('sm') { gap: 10px; }
 }
 
-/* ── Hero image column ─────────────────────────────────────────
-   Stack order (bottom → top):
-     1. <img>            — the real photo, covers the full column
-     2. ::after          — the brand gradient on top of the photo
-     3. .hero-deco rings — decorative circles
-     4. .hero-image-label — caption pill at bottom-left
-   ─────────────────────────────────────────────────────────────── */
+// ── Hero image column ─────────────────────────────────────────────
 .hero-image {
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
   padding: 28px;
-
   background: linear-gradient(150deg, $blush 0%, $warm-tan 55%, $brown 100%);
+  min-height: 400px;
 
-  // Gradient overlay layered ON TOP of the photo.
-  // opacity controls how strongly the brand colours bleed through.
   &::after {
     content: '';
     position: absolute;
     inset: 0;
     background: linear-gradient(150deg, $blush 0%, $warm-tan 55%, $brown 100%);
-    opacity: 0.45;   // ← lower = more photo, higher = more gradient
+    opacity: 0.45;
     pointer-events: none;
     z-index: 1;
   }
 
-  // The actual <img> — sits beneath the gradient overlay
   &-img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;  // keeps face in frame on all sizes
+    object-position: center top;
     z-index: 0;
   }
+
+  @include below('lg') { min-height: 360px; }
+  @include below('sm') { min-height: 280px; padding: 20px; }
 }
 
-// Everything inside .hero-image that needs to sit ABOVE the gradient
-// .hero-deco,
-// .hero-deco-inner,
 .hero-image-label {
   position: relative;
   z-index: 2;
-}
-
-.hero-image-label {
   background: rgba(250, 249, 246, 0.92);
   padding: 12px 18px;
   font-size: 10px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: $deep-brown;
+
+  @include below('sm') { font-size: 9px; padding: 8px 14px; }
 }
 
-/* ── STATS ── */
+// ── Stats bar ─────────────────────────────────────────────────────
 .stats-bar {
   background: $deep-brown;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   padding: 32px 80px;
+
+  @include below('lg') { padding: 28px 40px; }
+  @include below('sm') { padding: 24px 20px; grid-template-columns: 1fr; gap: 0; }
 }
 
 .stat {
@@ -114,6 +123,14 @@
   padding: 0 24px;
 
   &:last-child { border-right: none; }
+
+  @include below('sm') {
+    border-right: none;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    padding: 18px 0;
+
+    &:last-child { border-bottom: none; }
+  }
 }
 
 .stat-num {
@@ -122,6 +139,8 @@
   color: $gold;
   font-weight: 300;
   line-height: 1;
+
+  @include below('sm') { font-size: 32px; }
 }
 
 .stat-label {
@@ -132,11 +151,14 @@
   margin-top: 6px;
 }
 
-/* ── SERVICES ── */
+// ── Services grid ─────────────────────────────────────────────────
 .services-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 18px;
+
+  @include below('lg') { grid-template-columns: repeat(2, 1fr); }
+  @include below('sm') { grid-template-columns: 1fr; gap: 12px; }
 }
 
 .svc-card {
@@ -153,18 +175,13 @@
   position: relative;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-    &.has-image {
-    .svc-img-fill { 
-      display: none; 
-    }
-  }
+
+  &.has-image .svc-img-fill { display: none; }
+
+  @include below('sm') { height: 160px; }
 }
 
-.svc-img-fill {
-   width: 100%;
-   height: 100%; 
-}
+.svc-img-fill { width: 100%; height: 100%; }
 
 .si-1 { background: linear-gradient(140deg, #D4B896, #896C54); }
 .si-2 { background: linear-gradient(140deg, #E8D5C4, #B06F44); }
@@ -207,11 +224,37 @@
   letter-spacing: 1px;
 }
 
-/* ── QUOTE ── */
+// ── Service card as a link ────────────────────────────────────────
+.svc-card--link {
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+
+  &:hover {
+    .svc-learn { opacity: 1; transform: translateX(0); }
+    img, .svc-img-fill { transform: scale(1.03); }
+  }
+}
+
+.svc-learn {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $brown;
+  margin-top: 12px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+// ── Quote ─────────────────────────────────────────────────────────
 .quote-section {
   background: $cream;
   padding: 72px 60px;
   text-align: center;
+
+  @include below('md') { padding: 48px 32px; }
+  @include below('sm') { padding: 40px 24px; }
 }
 
 .quote-line {
@@ -230,6 +273,9 @@
   line-height: 1.5;
   max-width: 580px;
   margin: 0 auto;
+
+  @include below('md') { font-size: 24px; }
+  @include below('sm') { font-size: 20px; max-width: 100%; }
 }
 
 .quote-author {
@@ -239,18 +285,33 @@
   color: $light-brown;
 }
 
-/* ── GALLERY STRIP ── */
+// ── Gallery strip ─────────────────────────────────────────────────
 .gallery-strip {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 10px;
   height: 340px;
+
+  // Collapse to 2 cols on tablet — drop the sub-grid column
+  @include below('lg') {
+    grid-template-columns: 1fr 1fr;
+    height: 260px;
+  }
+
+  // Single column tall strip on mobile
+  @include below('sm') {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
 }
 
 .gallery-cell {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+
+  // On mobile each cell needs explicit height
+  @include below('sm') { height: 180px; }
 }
 
 .gallery-sub {
@@ -258,6 +319,11 @@
   grid-template-rows: 1fr 1fr;
   gap: 10px;
   height: 340px;
+
+  @include below('lg') { height: 260px; }
+
+  // Hide the sub-grid column entirely on mobile
+  @include below('sm') { display: none; }
 }
 
 .gf {
@@ -302,17 +368,17 @@
   transform: translateY(0);
 }
 
-/* ── TESTIMONIALS ── */
+// ── Testimonials ──────────────────────────────────────────────────
 .testi-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+
+  @include below('lg') { grid-template-columns: repeat(2, 1fr); }
+  @include below('sm') { grid-template-columns: 1fr; gap: 20px; }
 }
 
-.testi-card {
-  border-top: 2px solid $warm-tan;
-  padding-top: 20px;
-}
+.testi-card { border-top: 2px solid $warm-tan; padding-top: 20px; }
 
 .testi-stars {
   color: $gold;
@@ -336,7 +402,7 @@
   margin-top: 16px;
 }
 
-/* ── INSTAGRAM ── */
+// ── Instagram ─────────────────────────────────────────────────────
 .insta-handle {
   font-size: 10px;
   letter-spacing: 3px;
@@ -350,12 +416,26 @@
   grid-template-columns: repeat(6, 1fr);
   gap: 6px;
   margin-top: 28px;
+
+  @include below('lg') { grid-template-columns: repeat(4, 1fr); }
+  @include below('sm') { grid-template-columns: repeat(3, 1fr); }
 }
 
 .insta-cell {
   aspect-ratio: 1;
   overflow: hidden;
   cursor: pointer;
+  display: block;
+  position: relative;
+  text-decoration: none;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.25s;
+    display: block;
+  }
 
   > div {
     width: 100%;
@@ -363,6 +443,7 @@
     transition: transform 0.25s;
   }
 
+  &:hover img,
   &:hover > div { transform: scale(1.05); }
 }
 
@@ -373,7 +454,7 @@
 .ig5 { background: linear-gradient(160deg, #ddc9b5, #B06F44); }
 .ig6 { background: linear-gradient(130deg, #F2EAE0, #7A5C40); }
 
-/* ── CTA BANNER ── */
+// ── CTA banner ────────────────────────────────────────────────────
 .cta-banner {
   background: $deep-brown;
   padding: 64px 60px;
@@ -381,6 +462,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 40px;
+
+  @include below('lg') { padding: 48px 40px; }
+  @include below('md') {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px 24px;
+    gap: 24px;
+  }
 }
 
 .cta-title {
@@ -391,6 +480,9 @@
   line-height: 1.1;
 
   em { font-style: italic; }
+
+  @include below('md') { font-size: 32px; }
+  @include below('sm') { font-size: 26px; }
 }
 
 .cta-sub {
@@ -410,9 +502,11 @@
   text-transform: uppercase;
   white-space: nowrap;
   flex-shrink: 0;
+  text-decoration: none;
+  display: inline-block;
   transition: background 0.2s;
 
-  &:hover {
-     background: $warm-tan; 
-    }
+  &:hover { background: $warm-tan; }
+
+  @include below('md') { width: 100%; text-align: center; padding: 16px; }
 }

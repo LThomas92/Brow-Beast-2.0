@@ -59,24 +59,45 @@ function browbeast_widgets_init(): void {
 		'id'            => 'sidebar-1',
 		'before_widget' => '<section id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</section>',
-		'before_widget' => '<section id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</section>',
 		'before_title'  => '<h2 class="widget-title">',
 		'after_title'   => '</h2>',
 	] );
 }
 add_action( 'widgets_init', 'browbeast_widgets_init' );
 
-// Prevent ACF from breaking the Customizer
+// ── Prevent ACF and other plugins breaking the Customizer ────────
+// Priority 999 runs after all plugins have enqueued their scripts
 add_action( 'customize_controls_enqueue_scripts', function() {
+	// ACF scripts
 	wp_dequeue_script( 'acf-input' );
 	wp_dequeue_script( 'acf' );
 	wp_dequeue_script( 'acf-pro-input' );
 	wp_dequeue_script( 'acf-pro-ui-options-page' );
+	wp_dequeue_script( 'acf-pro-blocks' );
+	wp_dequeue_script( 'acf-field-group' );
+	// ACF styles
 	wp_dequeue_style( 'acf-input' );
 	wp_dequeue_style( 'acf-global' );
 	wp_dequeue_style( 'acf-inline-editing-styles' );
+	wp_dequeue_style( 'acf-datepicker' );
+	// Deregister too so they can't be re-enqueued by dependencies
+	wp_deregister_script( 'acf-input' );
+	wp_deregister_script( 'acf' );
 }, 999 );
+
+// Also block ACF from loading in the Customizer preview iframe
+add_action( 'customize_preview_init', function() {
+	wp_dequeue_script( 'acf-input' );
+	wp_dequeue_script( 'acf' );
+	wp_deregister_script( 'acf-input' );
+	wp_deregister_script( 'acf' );
+}, 999 );
+
+// Prevent ACF from redirecting or throwing errors in Customizer context
+add_filter( 'acf/settings/show_admin', function( $show ) {
+	if ( is_customize_preview() ) return false;
+	return $show;
+} );
 
 
 // ─────────────────────────────────────────────────────────────
@@ -107,9 +128,8 @@ function browbeast_scripts(): void {
 	wp_enqueue_style( 'browbeast-style', get_template_directory_uri() . $css, [], null );
 	wp_enqueue_script( 'browbeast-main',  get_template_directory_uri() . $js,  [], null, true );
 
-	wp_add_inline_script(
-		'browbeast-main',
-		'window.BrowBeast = ' . wp_json_encode( [
+	$browbeast_data = wp_json_encode(
+		[
 			'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 			'nonce'     => wp_create_nonce( 'browbeast_nonce' ),
 			'siteUrl'   => get_site_url(),
@@ -117,7 +137,13 @@ function browbeast_scripts(): void {
 				'browbeast_acuity_url',
 				'https://app.acuityscheduling.com/schedule.php?owner=19201786'
 			),
-		] ) . ';',
+		],
+		JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+	);
+
+	wp_add_inline_script(
+		'browbeast-main',
+		'window.BrowBeast = ' . $browbeast_data . ';',
 		'before'
 	);
 
@@ -126,6 +152,24 @@ function browbeast_scripts(): void {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'browbeast_scripts' );
+
+
+// ─────────────────────────────────────────────────────────────
+//  CUSTOMIZER FIXES
+// ─────────────────────────────────────────────────────────────
+
+// Allow Customizer preview to load from localhost/local domains
+add_filter( 'customize_loaded_components', function( $components ) {
+	return $components;
+} );
+
+// Extend HTTP timeout for slow local environments
+add_filter( 'http_request_timeout', function( $timeout ) {
+	if ( is_customize_preview() || ( defined('DOING_CRON') && DOING_CRON ) ) {
+		return 30;
+	}
+	return $timeout;
+} );
 
 
 // ─────────────────────────────────────────────────────────────
@@ -168,31 +212,6 @@ class Browbeast_Nav_Walker extends Walker_Nav_Menu {
 	public function end_lvl( &$output, $depth = 0, $args = null ): void {}
 }
 
-class Browbeast_Footer_Walker extends Walker_Nav_Menu {
- 
-	public function start_el( &$output, $data_object, $depth = 0, $args = null, $current_object_id = 0 ): void {
-		$item      = $data_object;
-		$classes   = empty( $item->classes ) ? [] : (array) $item->classes;
-		$classes[] = 'footer-link';
- 
-		if ( in_array( 'current-menu-item', $classes, true ) ) {
-			$classes[] = 'active';
-		}
- 
-		$output .= sprintf(
-			'<a href="%s" class="%s"%s%s>%s</a>',
-			esc_url( $item->url ?: '#' ),
-			esc_attr( implode( ' ', array_unique( array_filter( $classes ) ) ) ),
-			$item->target ? ' target="' . esc_attr( $item->target ) . '"' : '',
-			$item->xfn    ? ' rel="'    . esc_attr( $item->xfn )    . '"' : '',
-			esc_html( apply_filters( 'the_title', $item->title, $item->ID ) )
-		);
-	}
- 
-	public function end_el( &$output, $data_object, $depth = 0, $args = null ): void {}
-	public function start_lvl( &$output, $depth = 0, $args = null ): void {}
-	public function end_lvl( &$output, $depth = 0, $args = null ): void {}
-}
 
 // ─────────────────────────────────────────────────────────────
 //  NAV WALKER — Mobile Drawer
@@ -536,11 +555,25 @@ function browbeast_instagram_feed( int $count = 0, bool $header = true ): void {
 
 // ─────────────────────────────────────────────────────────────
 //  INCLUDES
+//  Using require_once with file_exists so a missing file
+//  never kills the Customizer or any other admin page
 // ─────────────────────────────────────────────────────────────
-require get_template_directory() . '/inc/template-tags.php';
-require get_template_directory() . '/inc/template-functions.php';
-require get_template_directory() . '/inc/customizer.php';
+$_browbeast_includes = [
+	'/inc/template-tags.php',
+	'/inc/template-functions.php',
+	'/inc/customizer.php',
+];
+
+foreach ( $_browbeast_includes as $_file ) {
+	$_path = get_template_directory() . $_file;
+	if ( file_exists( $_path ) ) {
+		require_once $_path;
+	}
+}
 
 if ( defined( 'JETPACK__VERSION' ) ) {
-	require get_template_directory() . '/inc/jetpack.php';
+	$_jetpack = get_template_directory() . '/inc/jetpack.php';
+	if ( file_exists( $_jetpack ) ) {
+		require_once $_jetpack;
+	}
 }

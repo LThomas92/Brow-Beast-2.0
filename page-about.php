@@ -108,7 +108,7 @@
 <div class="about-cta">
   <h2 class="cta-h">Ready to meet your<br><em>best brows?</em></h2>
   <p class="cta-p">Book your appointment with Gabrielle today and experience the difference of working with a true brow specialist.</p>
-  <a href="booking.html" class="btn-primary">Book Your Appointment</a>
+  <a href="<?php echo esc_url( get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' ) ); ?>" class="btn-primary">Book Your Appointment</a>
 </div>
 
 

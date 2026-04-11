@@ -18,6 +18,7 @@
 @use 'components/instagram';
 @use 'components/footer';
 @use 'components/buttons';
+@use 'components/legal';
 
 // Pages
 @use 'pages/front-page';
@@ -29,3 +30,4 @@
 @use 'pages/service-quiz';
 @use 'pages/contact';
 @use 'pages/course';
+@use 'pages/not-found';

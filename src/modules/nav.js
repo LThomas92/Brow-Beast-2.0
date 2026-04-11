@@ -1,40 +1,79 @@
 /**
- * Nav Module
- * Handles: split nav scroll behaviour, mobile drawer open/close
+ * Nav Module — Brow Beast
+ * Save as src/modules/nav.js
  */
 
 export function initNav() {
-	const nav    = document.querySelector( '.site-nav' );
-	const drawer = document.querySelector( '.mobile-drawer' );
-	const toggle = document.querySelector( '.nav-hamburger' );
-	const close  = document.querySelector( '.drawer-close' );
+  const hamburger  = document.querySelector( '.nav-hamburger' );
+  const drawer     = document.getElementById( 'mobileDrawer' );
+  const backdrop   = drawer?.querySelector( '.drawer-backdrop' );
+  const closeBtn   = drawer?.querySelector( '.drawer-close' );
+  const siteNav    = document.querySelector( '.site-nav' );
 
-	// ── Scroll: add .scrolled class for compact nav behaviour
-	if ( nav ) {
-		const onScroll = () => nav.classList.toggle( 'scrolled', window.scrollY > 40 );
-		window.addEventListener( 'scroll', onScroll, { passive: true } );
-	}
+  if ( ! hamburger || ! drawer ) return;
 
-	// ── Mobile drawer
-	toggle?.addEventListener( 'click', () => {
-		drawer?.classList.add( 'open' );
-		document.body.classList.add( 'drawer-open' );
-	} );
+  let isOpen = false;
 
-	close?.addEventListener( 'click', closeDrawer );
+  // ── Open ─────────────────────────────────────────────────────
+  function openDrawer() {
+    isOpen = true;
 
-	// Close on backdrop tap
-	drawer?.addEventListener( 'click', ( e ) => {
-		if ( e.target === drawer ) closeDrawer();
-	} );
+    // 1. Make drawer visible and block scroll immediately
+    drawer.style.display     = 'block';
+    document.body.style.overflow = 'hidden';
 
-	// Close on Escape
-	document.addEventListener( 'keydown', ( e ) => {
-		if ( e.key === 'Escape' ) closeDrawer();
-	} );
+    // 2. Force reflow so the browser registers the element
+    //    before transitions begin
+    drawer.getBoundingClientRect();
 
-	function closeDrawer() {
-		drawer?.classList.remove( 'open' );
-		document.body.classList.remove( 'drawer-open' );
-	}
+    // 3. Add .open — CSS transitions fire from here
+    drawer.classList.add( 'open' );
+    hamburger.classList.add( 'is-open' );
+    hamburger.setAttribute( 'aria-expanded', 'true' );
+    drawer.setAttribute( 'aria-hidden', 'false' );
+
+    // 4. After panel slides in, focus the first link
+    setTimeout( () => {
+      const first = drawer.querySelector( '.drawer-link' );
+      if ( first ) first.focus();
+    }, 450 );
+  }
+
+  // ── Close ─────────────────────────────────────────────────────
+  function closeDrawer() {
+    isOpen = false;
+    drawer.classList.remove( 'open' );
+    hamburger.classList.remove( 'is-open' );
+    hamburger.setAttribute( 'aria-expanded', 'false' );
+    drawer.setAttribute( 'aria-hidden', 'true' );
+    document.body.style.overflow = '';
+
+    // Hide drawer after slide-out animation completes
+    setTimeout( () => {
+      if ( ! isOpen ) drawer.style.display = 'none';
+    }, 420 );
+
+    hamburger.focus();
+  }
+
+  hamburger.addEventListener( 'click', () => isOpen ? closeDrawer() : openDrawer() );
+  closeBtn?.addEventListener( 'click', closeDrawer );
+  backdrop?.addEventListener( 'click', closeDrawer );
+
+  // Close when a nav link is clicked
+  drawer.querySelectorAll( '.drawer-link, .drawer-cta' ).forEach( el => {
+    el.addEventListener( 'click', closeDrawer );
+  } );
+
+  // Escape key
+  document.addEventListener( 'keydown', e => {
+    if ( e.key === 'Escape' && isOpen ) closeDrawer();
+  } );
+
+  // ── Nav scroll shadow ─────────────────────────────────────────
+  if ( siteNav ) {
+    const onScroll = () => siteNav.classList.toggle( 'scrolled', window.scrollY > 10 );
+    window.addEventListener( 'scroll', onScroll, { passive: true } );
+    onScroll();
+  }
 }

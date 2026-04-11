@@ -1,7 +1,7 @@
 @use '../index' as *;
 
 // ══════════════════════════════════════════════════════════════════
-//  SERVICES OVERVIEW PAGE  (page-services.php)
+//  SERVICES OVERVIEW PAGE
 // ══════════════════════════════════════════════════════════════════
 
 // ── Hero ──────────────────────────────────────────────────────────
@@ -10,7 +10,8 @@
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   min-height: 380px;
-  gap: 0;
+
+  @include below('lg') { grid-template-columns: 1fr; min-height: auto; }
 }
 
 .svc-hero-text {
@@ -19,11 +20,12 @@
   flex-direction: column;
   justify-content: center;
   gap: 16px;
+
+  @include below('lg') { padding: 48px 40px; }
+  @include below('sm') { padding: 40px 24px; }
 }
 
-.svc-hero-headline {
-  @include display-heading(48px);
-}
+.svc-hero-headline { @include display-heading(48px); }
 
 .svc-hero-sub {
   font-size: 14px;
@@ -37,8 +39,7 @@
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, $blush, $warm-tan, $brown);
-  background-size: cover;
-  background-position: center top;
+  min-height: 300px;
 
   &.has-image::after {
     content: '';
@@ -58,6 +59,8 @@
     object-position: center top;
     z-index: 0;
   }
+
+  @include below('lg') { min-height: 280px; }
 }
 
 // ── Service list rows ─────────────────────────────────────────────
@@ -72,6 +75,17 @@
   gap: 28px;
 
   &:first-child { border-top: 0.5px solid $blush; }
+
+  @include below('lg') {
+    grid-template-columns: 80px 1fr auto;
+    gap: 16px;
+    padding: 24px 0;
+  }
+
+  @include below('md') {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
 .svc-row-img {
@@ -82,16 +96,16 @@
   overflow: hidden;
   flex-shrink: 0;
 
-  &.has-image {
-    img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
+  &.has-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
+
+  @include below('lg') { height: 70px; }
+  @include below('md') { height: 140px; }
 }
 
 .svc-row-info { display: flex; flex-direction: column; gap: 6px; }
@@ -104,6 +118,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+
+  @include below('sm') { font-size: 18px; }
 }
 
 .svc-row-badge {
@@ -117,18 +134,8 @@
   border: 0.5px solid $warm-tan;
 }
 
-.svc-row-desc {
-  font-size: 12px;
-  color: $muted-text;
-  line-height: 1.65;
-}
-
-.svc-row-tag {
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: $light-brown;
-}
+.svc-row-desc { font-size: 12px; color: $muted-text; line-height: 1.65; }
+.svc-row-tag  { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: $light-brown; }
 
 .svc-row-learn {
   font-size: 11px;
@@ -147,24 +154,17 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 12px;
+
+  @include below('md') {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
 }
 
-.svc-price-wrap {}
-
-.svc-row-price {
-  font-family: $font-serif;
-  font-size: 26px;
-  color: $deep-brown;
-  line-height: 1;
-}
-
-.svc-price-sub {
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: $muted-text;
-  margin-top: 3px;
-}
+.svc-row-price { font-family: $font-serif; font-size: 26px; color: $deep-brown; line-height: 1; }
+.svc-price-sub { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: $muted-text; margin-top: 3px; }
 
 .btn-book-svc {
   background: $deep-brown;
@@ -179,11 +179,12 @@
   text-decoration: none;
   display: inline-block;
   transition: background $transition-base;
+  white-space: nowrap;
 
   &:hover { background: $brown; }
 }
 
-// ── Booking CTA at bottom of list ─────────────────────────────────
+// ── Booking CTA ───────────────────────────────────────────────────
 .svc-booking-cta {
   text-align: center;
   padding: 56px 0 0;
@@ -200,18 +201,15 @@
   color: $deep-brown;
 
   em { font-style: italic; color: $light-brown; }
+
+  @include below('sm') { font-size: 28px; }
 }
 
-.svc-booking-sub {
-  font-size: 13px;
-  color: $muted-text;
-  max-width: 360px;
-  line-height: 1.7;
-}
+.svc-booking-sub { font-size: 13px; color: $muted-text; max-width: 360px; line-height: 1.7; }
 
 
 // ══════════════════════════════════════════════════════════════════
-//  SINGLE SERVICE PAGE  (page-single-service.php)
+//  SINGLE SERVICE PAGE
 // ══════════════════════════════════════════════════════════════════
 
 // ── Hero ──────────────────────────────────────────────────────────
@@ -220,6 +218,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 480px;
+
+  @include below('lg') { grid-template-columns: 1fr; min-height: auto; }
 }
 
 .single-svc-hero-text {
@@ -228,11 +228,12 @@
   flex-direction: column;
   justify-content: center;
   gap: 18px;
+
+  @include below('lg') { padding: 48px 40px; }
+  @include below('sm') { padding: 40px 24px; gap: 14px; }
 }
 
-.single-svc-headline {
-  @include display-heading(52px);
-}
+.single-svc-headline { @include display-heading(52px); }
 
 .single-svc-intro {
   font-size: 14px;
@@ -240,36 +241,27 @@
   line-height: 1.8;
   font-weight: 300;
   max-width: 380px;
+
+  @include below('lg') { max-width: 100%; }
 }
 
-// Meta strip (price, duration, longevity)
 .single-svc-meta {
   display: flex;
   gap: 28px;
   margin: 8px 0;
+  flex-wrap: wrap;
+
+  @include below('sm') { gap: 16px; }
 }
 
-.meta-item {}
+.meta-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: $muted-text; margin-bottom: 4px; }
+.meta-val   { font-family: $font-serif; font-size: 20px; color: $deep-brown; }
 
-.meta-label {
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: $muted-text;
-  margin-bottom: 4px;
-}
-
-.meta-val {
-  font-family: $font-serif;
-  font-size: 20px;
-  color: $deep-brown;
-}
-
-// Hero image column
 .single-svc-hero-img {
   position: relative;
   overflow: hidden;
   background: linear-gradient(150deg, $blush, $warm-tan, $brown);
+  min-height: 360px;
 
   &.has-image::after {
     content: '';
@@ -289,29 +281,16 @@
     object-position: center top;
     z-index: 0;
   }
+
+  @include below('lg') { min-height: 300px; }
 }
 
 // ── Ideal for ─────────────────────────────────────────────────────
-.single-svc-ideal {
-  max-width: 640px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.single-svc-ideal-text {
-  font-size: 14px;
-  color: $muted-text;
-  line-height: 1.85;
-}
+.single-svc-ideal { max-width: 640px; display: flex; flex-direction: column; gap: 16px; }
+.single-svc-ideal-text { font-size: 14px; color: $muted-text; line-height: 1.85; }
 
 // ── Process steps ─────────────────────────────────────────────────
-.process-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 36px;
-}
+.process-steps { display: flex; flex-direction: column; margin-top: 36px; }
 
 .process-step {
   display: flex;
@@ -321,6 +300,8 @@
   border-bottom: 0.5px solid $blush;
 
   &:first-child { border-top: 0.5px solid $blush; }
+
+  @include below('sm') { gap: 14px; padding: 18px 0; }
 }
 
 .process-step-num {
@@ -331,27 +312,22 @@
   line-height: 1;
   min-width: 48px;
   flex-shrink: 0;
+
+  @include below('sm') { font-size: 28px; min-width: 36px; }
 }
 
-.process-step-name {
-  font-size: 15px;
-  font-weight: 500;
-  color: $deep-brown;
-  margin-bottom: 5px;
-}
+.process-step-name { font-size: 15px; font-weight: 500; color: $deep-brown; margin-bottom: 5px; }
+.process-step-desc { font-size: 13px; color: $muted-text; line-height: 1.65; }
 
-.process-step-desc {
-  font-size: 13px;
-  color: $muted-text;
-  line-height: 1.65;
-}
-
-// ── Service gallery grid ──────────────────────────────────────────
+// ── Service gallery ───────────────────────────────────────────────
 .single-svc-gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 32px;
+
+  @include below('md') { grid-template-columns: repeat(2, 1fr); }
+  @include below('sm') { grid-template-columns: 1fr; }
 }
 
 .single-svc-gallery-item {
@@ -359,13 +335,7 @@
   overflow: hidden;
   cursor: pointer;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform $transition-slow;
-  }
-
+  img { width: 100%; height: 100%; object-fit: cover; transition: transform $transition-slow; }
   &:hover img { transform: scale(1.04); }
 }
 
@@ -375,6 +345,8 @@
   gap: 28px;
   align-items: flex-start;
   max-width: 720px;
+
+  @include below('sm') { flex-direction: column; gap: 16px; }
 }
 
 .aftercare-icon {
@@ -390,26 +362,11 @@
   margin-top: 8px;
 }
 
-.aftercare-text {
-  font-size: 13px;
-  color: $muted-text;
-  line-height: 1.85;
-  margin-top: 16px;
-}
+.aftercare-text { font-size: 13px; color: $muted-text; line-height: 1.85; margin-top: 16px; }
 
-// ── FAQ accordion ─────────────────────────────────────────────────
-.faq-list {
-  display: flex;
-  flex-direction: column;
-  margin-top: 32px;
-  max-width: 720px;
-}
-
-.faq-item {
-  border-bottom: 0.5px solid $blush;
-
-  &:first-child { border-top: 0.5px solid $blush; }
-}
+// ── FAQ on service page ───────────────────────────────────────────
+.faq-list { display: flex; flex-direction: column; margin-top: 32px; max-width: 720px; }
+.faq-item { border-bottom: 0.5px solid $blush; &:first-child { border-top: 0.5px solid $blush; } }
 
 .faq-q {
   width: 100%;
@@ -428,27 +385,11 @@
   transition: color $transition-fast;
 
   &:hover { color: $light-brown; }
-
-  &[aria-expanded="true"] {
-    color: $light-brown;
-
-    .faq-chevron { transform: rotate(180deg); }
-  }
+  &[aria-expanded="true"] { color: $light-brown; .faq-chevron { transform: rotate(180deg); } }
 }
 
-.faq-chevron {
-  flex-shrink: 0;
-  color: $warm-tan;
-  transition: transform $transition-base;
-}
-
-.faq-a {
-  font-size: 13px;
-  color: $muted-text;
-  line-height: 1.75;
-  padding: 0 0 18px;
-  max-width: 600px;
-}
+.faq-chevron { flex-shrink: 0; color: $warm-tan; transition: transform $transition-base; }
+.faq-a { font-size: 13px; color: $muted-text; line-height: 1.75; padding: 0 0 18px; max-width: 600px; }
 
 // ── Related services ──────────────────────────────────────────────
 .related-services {
@@ -456,15 +397,12 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
   margin-top: 32px;
+
+  @include below('md') { grid-template-columns: repeat(2, 1fr); }
+  @include below('sm') { grid-template-columns: 1fr; }
 }
 
-.related-svc-card {
-  text-decoration: none;
-  display: block;
-  cursor: pointer;
-
-  @include hover-lift;
-}
+.related-svc-card { text-decoration: none; display: block; @include hover-lift; }
 
 .related-svc-img {
   height: 160px;
@@ -473,55 +411,8 @@
   background-position: center;
   position: relative;
 
-  &.has-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform $transition-slow;
-  }
+  &.has-image img { width: 100%; height: 100%; object-fit: cover; transition: transform $transition-slow; }
 }
 
 .related-svc-card:hover .related-svc-img img { transform: scale(1.04); }
-
-.related-svc-name {
-  font-family: $font-serif;
-  font-size: 17px;
-  color: $deep-brown;
-  padding: 14px 0 8px;
-}
-
-// ── Responsive ───────────────────────────────────────────────────
-@include below('lg') {
-  .svc-hero,
-  .single-svc-hero { grid-template-columns: 1fr; }
-
-  .svc-hero-img,
-  .single-svc-hero-img {
-    height: 300px;
-    position: relative;
-  }
-
-  .svc-row {
-    grid-template-columns: 80px 1fr;
-    grid-template-rows: auto auto;
-  }
-
-  .svc-row-right {
-    grid-column: 2;
-    align-items: flex-start;
-    flex-direction: row;
-    gap: 16px;
-  }
-
-  .related-services,
-  .single-svc-gallery { grid-template-columns: repeat(2, 1fr); }
-}
-
-@include below('md') {
-  .svc-row { grid-template-columns: 1fr; }
-  .svc-row-img { height: 140px; }
-  .svc-row-right { flex-direction: row; align-items: center; justify-content: space-between; }
-  .related-services { grid-template-columns: 1fr; }
-  .single-svc-gallery { grid-template-columns: 1fr; }
-  .single-svc-meta { flex-wrap: wrap; gap: 16px; }
-}
+.related-svc-name { font-family: $font-serif; font-size: 17px; color: $deep-brown; padding: 14px 0 8px; }

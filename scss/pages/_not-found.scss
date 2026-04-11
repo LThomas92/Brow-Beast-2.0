@@ -1,0 +1,132 @@
+@use '../index' as *;
+
+.not-found-page {
+  background: $cream;
+  min-height: calc(100vh - 73px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 80px 40px;
+
+  @include below('sm') { padding: 60px 24px; align-items: flex-start; }
+}
+
+// ── Giant background "404" ────────────────────────────────────────
+.not-found-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: $font-serif;
+  font-size: clamp(160px, 30vw, 320px);
+  font-weight: 300;
+  color: $blush;
+  opacity: 0.5;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+// ── Content ───────────────────────────────────────────────────────
+.not-found-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.not-found-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: $light-brown;
+}
+
+.not-found-headline {
+  font-family: $font-serif;
+  font-size: 52px;
+  font-weight: 300;
+  color: $deep-brown;
+  line-height: 1.1;
+
+  em { font-style: italic; color: $light-brown; }
+
+  @include below('md') { font-size: 38px; }
+  @include below('sm') { font-size: 30px; }
+}
+
+.not-found-sub {
+  font-size: 14px;
+  color: $muted-text;
+  line-height: 1.75;
+  max-width: 420px;
+}
+
+// ── Quick links grid ──────────────────────────────────────────────
+.not-found-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 4px 0;
+
+  @include below('sm') { grid-template-columns: 1fr; }
+}
+
+.not-found-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: $white;
+  border: 0.5px solid $blush;
+  text-decoration: none;
+  transition: border-color $transition-fast, background $transition-fast;
+
+  &:hover {
+    border-color: $warm-tan;
+    background: $off-white;
+
+    .nfl-name { color: $light-brown; }
+  }
+}
+
+.nfl-icon {
+  font-size: 18px;
+  color: $warm-tan;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+  line-height: 1;
+}
+
+.nfl-name {
+  font-family: $font-serif;
+  font-size: 16px;
+  color: $deep-brown;
+  transition: color $transition-fast;
+}
+
+.nfl-sub {
+  font-size: 11px;
+  color: $muted-text;
+  margin-top: 2px;
+}
+
+// ── CTA buttons ───────────────────────────────────────────────────
+.not-found-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+
+  @include below('sm') { flex-direction: column; }
+}

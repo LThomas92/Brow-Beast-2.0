@@ -1,60 +1,87 @@
 <?php
 /**
- * The template for displaying 404 pages (not found)
- *
- * @link https://codex.wordpress.org/Creating_an_Error_404_Page
- *
- * @package Brow_Beast_2.0
+ * 404 Page — The Brow Beast
  */
-
 get_header();
+$booking_url  = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' );
+$services_url = get_permalink( get_page_by_path( 'services' ) ) ?: home_url( '/services/' );
+$gallery_url  = get_permalink( get_page_by_path( 'gallery' ) )  ?: home_url( '/gallery/' );
+$contact_url  = get_permalink( get_page_by_path( 'contact' ) )  ?: home_url( '/contact/' );
 ?>
 
-	<main id="primary" class="site-main">
+<div class="not-found-page">
 
-		<section class="error-404 not-found">
-			<header class="page-header">
-				<h1 class="page-title"><?php esc_html_e( 'Oops! That page can&rsquo;t be found.', 'brow-beast-2-0' ); ?></h1>
-			</header><!-- .page-header -->
+  <!-- Decorative background text -->
+  <div class="not-found-bg-text" aria-hidden="true">404</div>
 
-			<div class="page-content">
-				<p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try one of the links below or a search?', 'brow-beast-2-0' ); ?></p>
+  <div class="not-found-inner">
 
-					<?php
-					get_search_form();
+    <div class="not-found-tag">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="8" cy="8" r="6"/>
+        <line x1="8" y1="5" x2="8" y2="8.5"/>
+        <circle cx="8" cy="11" r="0.6" fill="currentColor" stroke="none"/>
+      </svg>
+      Page not found
+    </div>
 
-					the_widget( 'WP_Widget_Recent_Posts' );
-					?>
+    <h1 class="not-found-headline">
+      We lost this page,<br>
+      but your <em>perfect brow</em><br>
+      is still waiting.
+    </h1>
 
-					<div class="widget widget_categories">
-						<h2 class="widget-title"><?php esc_html_e( 'Most Used Categories', 'brow-beast-2-0' ); ?></h2>
-						<ul>
-							<?php
-							wp_list_categories(
-								array(
-									'orderby'    => 'count',
-									'order'      => 'DESC',
-									'show_count' => 1,
-									'title_li'   => '',
-									'number'     => 10,
-								)
-							);
-							?>
-						</ul>
-					</div><!-- .widget -->
+    <p class="not-found-sub">
+      The page you're looking for doesn't exist or may have moved.
+      Let's get you back on track.
+    </p>
 
-					<?php
-					/* translators: %1$s: smiley */
-					$brow_beast_2_0_archive_content = '<p>' . sprintf( esc_html__( 'Try looking in the monthly archives. %1$s', 'brow-beast-2-0' ), convert_smilies( ':)' ) ) . '</p>';
-					the_widget( 'WP_Widget_Archives', 'dropdown=1', "after_title=</h2>$brow_beast_2_0_archive_content" );
+    <!-- Quick links -->
+    <div class="not-found-links">
+      <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="not-found-link">
+        <div class="nfl-icon">→</div>
+        <div>
+          <div class="nfl-name">Home</div>
+          <div class="nfl-sub">Back to the beginning</div>
+        </div>
+      </a>
+      <a href="<?php echo esc_url( $services_url ); ?>" class="not-found-link">
+        <div class="nfl-icon">✦</div>
+        <div>
+          <div class="nfl-name">Services</div>
+          <div class="nfl-sub">Browse all brow services</div>
+        </div>
+      </a>
+      <a href="<?php echo esc_url( $gallery_url ); ?>" class="not-found-link">
+        <div class="nfl-icon">◈</div>
+        <div>
+          <div class="nfl-name">Gallery</div>
+          <div class="nfl-sub">Before & after transformations</div>
+        </div>
+      </a>
+      <a href="<?php echo esc_url( $contact_url ); ?>" class="not-found-link">
+        <div class="nfl-icon">◇</div>
+        <div>
+          <div class="nfl-name">Contact</div>
+          <div class="nfl-sub">Get in touch with Gabrielle</div>
+        </div>
+      </a>
+    </div>
 
-					the_widget( 'WP_Widget_Tag_Cloud' );
-					?>
+    <div class="not-found-cta">
+      <a href="<?php echo esc_url( $booking_url ); ?>"
+         class="btn-primary"
+         target="_blank"
+         rel="noopener noreferrer">
+        Book an Appointment
+      </a>
+      <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="btn-ghost">
+        Go Home
+      </a>
+    </div>
 
-			</div><!-- .page-content -->
-		</section><!-- .error-404 -->
+  </div>
 
-	</main><!-- #main -->
+</div>
 
-<?php
-get_footer();
+<?php get_footer(); ?>

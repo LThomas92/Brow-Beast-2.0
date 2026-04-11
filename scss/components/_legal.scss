@@ -1,0 +1,223 @@
+@use '../index' as *;
+
+// ══════════════════════════════════════════════════════════════════
+//  LEGAL PAGES — Privacy Policy & Accessibility Statement
+//  Both pages use the same .legal-page wrapper
+// ══════════════════════════════════════════════════════════════════
+
+.legal-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+
+  @include below('md') { padding: 0 24px 60px; }
+  @include below('sm') { padding: 0 20px 48px; }
+}
+
+// ── Hero ──────────────────────────────────────────────────────────
+.legal-hero {
+  padding: 64px 0 48px;
+  border-bottom: 0.5px solid $blush;
+  margin-bottom: 56px;
+
+  .tag { margin-bottom: 12px; }
+
+  @include below('sm') { padding: 48px 0 36px; margin-bottom: 40px; }
+}
+
+.legal-headline {
+  font-family: $font-serif;
+  font-size: 52px;
+  font-weight: 300;
+  color: $deep-brown;
+  line-height: 1.05;
+  margin-bottom: 12px;
+
+  @include below('md') { font-size: 38px; }
+  @include below('sm') { font-size: 30px; }
+}
+
+.legal-meta {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: $muted-text;
+  text-transform: uppercase;
+}
+
+// ── Intro highlight box ───────────────────────────────────────────
+.legal-intro-box {
+  background: $cream;
+  border-left: 3px solid $gold;
+  padding: 20px 24px;
+  margin-bottom: 48px;
+
+  p {
+    font-size: 14px;
+    color: $dark-text;
+    line-height: 1.8;
+    margin: 0;
+  }
+}
+
+// ── Sections ──────────────────────────────────────────────────────
+.legal-section {
+  margin-bottom: 48px;
+  padding-bottom: 48px;
+  border-bottom: 0.5px solid $blush;
+
+  &:last-child { border-bottom: none; }
+
+  @include below('sm') { margin-bottom: 36px; padding-bottom: 36px; }
+}
+
+.legal-section h2 {
+  font-family: $font-serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: $deep-brown;
+  margin-bottom: 16px;
+  line-height: 1.2;
+
+  @include below('sm') { font-size: 22px; }
+}
+
+.legal-section h3 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: $brown;
+  margin: 24px 0 10px;
+
+  &:first-of-type { margin-top: 16px; }
+}
+
+.legal-section p {
+  font-size: 14px;
+  color: $muted-text;
+  line-height: 1.85;
+  margin-bottom: 14px;
+
+  &:last-child { margin-bottom: 0; }
+
+  strong { color: $dark-text; font-weight: 500; }
+
+  a {
+    color: $brown;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color $transition-fast;
+
+    &:hover { color: $deep-brown; }
+  }
+}
+
+.legal-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.legal-section ul li {
+  font-size: 14px;
+  color: $muted-text;
+  line-height: 1.75;
+  padding-left: 20px;
+  position: relative;
+
+  &::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: $warm-tan;
+    font-size: 12px;
+  }
+
+  strong { color: $dark-text; font-weight: 500; }
+
+  a {
+    color: $brown;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover { color: $deep-brown; }
+  }
+
+  code {
+    font-family: monospace;
+    background: $cream;
+    padding: 1px 6px;
+    font-size: 12px;
+    color: $brown;
+    border: 0.5px solid $blush;
+  }
+}
+
+// ── Contact info block ────────────────────────────────────────────
+.legal-contact-block {
+  background: $cream;
+  border: 0.5px solid $blush;
+  padding: 20px 24px;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: $dark-text;
+  line-height: 1.6;
+
+  strong { color: $deep-brown; }
+
+  a {
+    color: $brown;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover { color: $deep-brown; }
+  }
+}
+
+// ── Third-party services list ─────────────────────────────────────
+.legal-third-party-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 16px;
+  border-top: 0.5px solid $blush;
+}
+
+.legal-third-party-item {
+  padding: 20px 0;
+  border-bottom: 0.5px solid $blush;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.legal-third-party-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: $deep-brown;
+}
+
+.legal-third-party-desc {
+  font-size: 13px;
+  color: $muted-text;
+  line-height: 1.65;
+}
+
+.legal-third-party-item a {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: $brown;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin-top: 4px;
+  align-self: flex-start;
+  transition: color $transition-fast;
+
+  &:hover { color: $deep-brown; }
+}

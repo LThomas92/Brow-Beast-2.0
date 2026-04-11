@@ -120,9 +120,13 @@
 <div class="footer-bottom">
   <span>© <?php echo date( 'Y' ); ?> The Brow Beast · Great Neck, NY</span>
   <span>
+    <a target="_blank" href="<?php echo esc_url('https://lawscodes.com'); ?>">Designed by Laws & Codes</a>
+     <span class="footer-bottom-sep">·</span>
     <a href="<?php echo esc_url( get_privacy_policy_url() ?: home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a>
     <span class="footer-bottom-sep">·</span>
-    <a href="#">Terms &amp; Conditions</a>
+    <a href="<?php echo esc_url(get_permalink( get_page_by_path( '/terms-conditions/' ))); ?>">Terms &amp; Conditions</a>
+     <span class="footer-bottom-sep">·</span>
+     <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'accessibility' ) )); ?>">Accessibility Statement</a>
   </span>
 </div>
 

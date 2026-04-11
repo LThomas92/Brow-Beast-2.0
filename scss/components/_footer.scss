@@ -1,13 +1,35 @@
-// ─── Component: footer ─────────────────────────────────────────────
+// ─── Component: Footer ───────────────────────────────────────────
 @use '../index' as *;
 
 .site-footer {
   background: $deep-brown;
   padding: 56px 60px 24px;
-  color: rgba(255,255,255,0.55);
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 48px;
+
+  @include below('lg') {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 48px 40px 24px;
+  }
+
+  @include below('sm') {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 40px 24px 20px;
+  }
+}
+
+// ── Brand column ──────────────────────────────────────────────────
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  // On tablet span both columns
+  @include below('lg') { grid-column: 1 / -1; }
+  @include below('sm') { grid-column: auto; }
 }
 
 .footer-logo {
@@ -18,13 +40,51 @@
   text-transform: uppercase;
   font-weight: 300;
   margin-bottom: 14px;
+
+  span { color: rgba($gold, 0.6); }
 }
 
-.footer-text { 
-    font-size: 12px; 
-    line-height: 1.8; 
-    color: rgba(255,255,255,0.45);
-    margin-bottom: 1rem; 
+.footer-logo-img {
+  max-height: 48px;
+  width: auto;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.footer-text {
+  font-size: 12px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 1rem;
+}
+
+.footer-address a {
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover { color: $gold; }
+}
+
+.footer-social {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+
+  a {
+    color: rgba(255, 255, 255, 0.35);
+    transition: color $transition-fast;
+    display: flex;
+    align-items: center;
+
+    &:hover { color: $gold; }
+  }
+}
+
+// ── Nav columns ───────────────────────────────────────────────────
+.footer-col {
+  display: flex;
+  flex-direction: column;
 }
 
 .footer-col-title {
@@ -35,44 +95,75 @@
   margin-bottom: 18px;
 }
 
-.footer-links { 
-    display: flex; 
-    flex-direction: column;
-    gap: 10px; 
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.footer-links a {
-    font-size: 12px; 
-    color: rgba(255,255,255,0.45); 
-    transition: color .2s;
-    &:hover {
-        color: $gold; 
-    }
- }
+.footer-links a,
+.footer-link {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  transition: color $transition-fast;
+  line-height: 1.5;
 
+  &:hover { color: $gold; }
+}
+
+// ── Footer bottom bar ─────────────────────────────────────────────
 .footer-bottom {
   background: $deep-brown;
-  border-top: 0.5px solid rgba(255,255,255,0.1);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.1);
   padding: 16px 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 10px;
   letter-spacing: 1px;
-  color: rgba(255,255,255,0.25);
+  color: rgba(255, 255, 255, 0.25);
+  gap: 16px;
+  flex-wrap: wrap;
+
+  a {
+    color: rgba(255, 255, 255, 0.25);
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover { color: rgba(255, 255, 255, 0.55); }
+  }
+
+  @include below('lg') { padding: 16px 40px; }
+
+  @include below('sm') {
+    padding: 16px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
 
-/* ─── RESPONSIVE ──────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .section {
-    padding: 48px 24px;
- }
+.footer-bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 
-  .nav-inner { padding: 0 20px; }
+  a {
+    color: rgba(255, 255, 255, 0.25);
+    text-decoration: none;
+    transition: color $transition-fast;
+    white-space: nowrap;
 
-  .nav-left .nav-link:not(.nav-book) { display: none; }
+    &:hover { color: rgba(255, 255, 255, 0.55); }
+  }
 
-  .site-footer {
-    grid-template-columns: 1fr;
-    padding: 40px 24px 20px; gap: 32px; }
+  @include below('sm') { justify-content: flex-start; }
+}
+
+.footer-bottom-sep {
+  margin: 0 8px;
+  opacity: 0.3;
 }

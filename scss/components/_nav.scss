@@ -29,12 +29,11 @@
   height: $nav-height;
   padding: 0 48px;
 
-  @include below('lg') {
-    padding: 0 24px;
-  }
+  @include below('lg') { padding: 0 24px; }
+  @include below('sm') { padding: 0 16px; }
 }
 
-// ── Logo (centered, absolutely positioned) ───────────────────────
+// ── Logo ─────────────────────────────────────────────────────────
 .nav-logo {
   position: absolute;
   left: 50%;
@@ -50,16 +49,47 @@
   transition: opacity $transition-fast;
 
   span { color: $light-brown; }
-
   &:hover { opacity: 0.75; }
+
+  // Slightly smaller on tablet
+  @include below('lg') {
+    font-size: 17px;
+    letter-spacing: 3px;
+  }
+
+  // On mobile the logo sits naturally in flex flow — remove absolute
+  @include below('sm') {
+    position: static;
+    transform: none;
+    font-size: 16px;
+    letter-spacing: 2.5px;
+  }
 }
 
-// ── Left / Right link groups ──────────────────────────────────────
-.nav-left,
-.nav-right {
+// ── Left nav ──────────────────────────────────────────────────────
+.nav-left {
   display: flex;
   gap: 32px;
   align-items: center;
+
+  // Hidden on tablet and below — drawer takes over
+  @include below('lg') { display: none; }
+}
+
+// ── Right nav ─────────────────────────────────────────────────────
+.nav-right {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+
+  // The <nav> inside nav-right holds the <a> links
+  nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+
+    @include below('lg') { display: none; }
+  }
 }
 
 .nav-link {
@@ -79,41 +109,12 @@
     transition: transform $transition-base;
   }
 
-  &:hover       { color: $deep-brown; }
-  &.active      { color: $deep-brown; }
+  &:hover        { color: $deep-brown; }
+  &.active       { color: $deep-brown; }
   &.active::after { transform: scaleX(1); }
 }
 
-// ── Search input ──────────────────────────────────────────────────
-.nav-search-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: $cream;
-  border: 0.5px solid $blush;
-  padding: 7px 14px;
-  cursor: text;
-  transition: border-color $transition-fast;
-
-  &:focus-within { border-color: $warm-tan; }
-
-  input {
-    border: none;
-    background: transparent;
-    font-family: $font-sans;
-    font-size: 11px;
-    color: $dark-text;
-    outline: none;
-    width: 130px;
-
-    &::placeholder {
-      color: $warm-tan;
-      letter-spacing: 1px;
-    }
-  }
-}
-
-// ── Book Now pill ─────────────────────────────────────────────────
+// ── Book Now button ───────────────────────────────────────────────
 .nav-book {
   background: $deep-brown;
   color: $cream;
@@ -124,11 +125,21 @@
   border-radius: 20px;
   text-decoration: none;
   transition: background $transition-base;
+  white-space: nowrap;
 
   &:hover { background: $brown; }
+
+  // Smaller on tablet
+  @include below('lg') {
+    padding: 8px 16px;
+    font-size: 8px;
+  }
+
+  // Hide on mobile — drawer CTA handles booking
+  @include below('sm') { display: none; }
 }
 
-// ── Mobile hamburger (visible < lg) ──────────────────────────────
+// ── Hamburger ─────────────────────────────────────────────────────
 .nav-hamburger {
   display: none;
   flex-direction: column;
@@ -137,6 +148,7 @@
   background: none;
   border: none;
   padding: 4px;
+  flex-shrink: 0;
 
   span {
     display: block;
@@ -151,6 +163,7 @@
 
   &:hover span { width: 22px; }
 
+  // Show on tablet and below
   @include below('lg') { display: flex; }
 }
 
@@ -176,8 +189,14 @@
   width: min(340px, 90vw);
   height: 100%;
   background: $deep-brown;
-  padding: 0;
   overflow-y: auto;
+  // Slide in from right
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+
+  .mobile-drawer.open & {
+    transform: translateX(0);
+  }
 }
 
 .drawer-header {
@@ -187,6 +206,7 @@
   padding: 0 24px;
   height: $nav-height;
   border-bottom: 0.5px solid rgba($gold, 0.2);
+  flex-shrink: 0;
 }
 
 .drawer-logo {
@@ -196,6 +216,7 @@
   text-transform: uppercase;
   color: $gold;
   font-weight: 300;
+  text-decoration: none;
 }
 
 .drawer-close {
@@ -205,12 +226,15 @@
   cursor: pointer;
   transition: color $transition-fast;
   padding: 4px;
+  flex-shrink: 0;
 
   &:hover { color: $gold; }
 }
 
 .drawer-body {
-    padding: 32px 24px; 
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
 }
 
 .drawer-search {
@@ -235,23 +259,75 @@
   }
 }
 
-.drawer-links {
-    display: flex; 
-    flex-direction: column; 
-}
-
 .drawer-link {
   font-family: $font-serif;
   font-size: 28px;
   font-weight: 300;
-  color: rgba(white, 0.7);
+  color: rgba(white, 0.65);
   padding: 14px 0;
-  border-bottom: 0.5px solid rgba($gold, 0.12);
+  border-bottom: 0.5px solid rgba($gold, 0.1);
   text-decoration: none;
-  transition: color $transition-fast;
+  display: block;
+  position: relative;
 
-  &:hover,
-  &.active { color: $gold; }
+  // ── Entrance animation ──────────────────────────────────────
+  // Links start invisible and slightly below their resting position.
+  // When .open fires, they slide up and fade in with a stagger.
+  opacity: 0;
+  transform: translateX(24px); // slides in from right, feels intentional
+
+  transition:
+    opacity    0.4s ease,
+    transform  0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    color      0.15s ease;
+
+  // Stagger — each link waits a little longer than the previous.
+  // Panel arrives at ~300ms, so links start from 320ms onwards.
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      transition-delay: #{0.28 + ($i * 0.055)}s;
+    }
+  }
+
+  // Revealed state
+  .mobile-drawer.open & {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  // Hover / active
+  &:hover { color: $gold; }
+  &.active {
+    color: $gold;
+    &::after {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 28px;
+      background: $gold;
+    }
+  }
+
+  @include below('sm') { font-size: 24px; padding: 12px 0; }
+}
+
+// ── Drawer CTA also animates in ────────────────────────────────
+.drawer-cta {
+  opacity: 0;
+  transform: translateX(24px);
+  transition:
+    opacity    0.4s ease,
+    transform  0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.2s ease;
+  transition-delay: 0.65s; // arrives after all the links
+
+  .mobile-drawer.open & {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .drawer-cta {
@@ -269,11 +345,4 @@
   transition: background $transition-base;
 
   &:hover { background: $warm-tan; }
-}
-
-// ── Hide desktop links on mobile ──────────────────────────────────
-@include below('lg') {
-  .nav-left  { display: none; }
-  .nav-right .nav-link,
-  .nav-right .nav-search-wrap { display: none; }
 }

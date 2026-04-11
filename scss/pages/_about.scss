@@ -1,251 +1,289 @@
 @use '../index' as *;
 
-    .about-hero {
-        background: $cream;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        min-height: 480px;
-    }
+// ── Hero ──────────────────────────────────────────────────────────
+.about-hero {
+  background: $cream;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 480px;
 
-    .about-hero-img {
-      background: linear-gradient(150deg, $blush) 0%, $warm-tan 50%, $brown 100%;
-      position: relative;
-      min-height: 420px;
-      display: flex;
-      align-items: flex-end;
-    }
+  @include below('lg') { grid-template-columns: 1fr; min-height: auto; }
+}
 
-    .about-hero-badge {
-      position: absolute;
-      bottom: 28px; right: 28px;
-      background: $deep-brown;
-      color: $gold;
-      padding: 16px 20px;
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-align: center;
-      line-height: 1.8;
-    }
+.about-hero-img {
+  background: linear-gradient(150deg, $blush 0%, $warm-tan 50%, $brown 100%);
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
 
-    .about-hero-text {
-      padding: 70px 60px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 18px;
-    }
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    z-index: 0;
+  }
 
-    .about-headline {
-      font-family: $font-serif;
-      font-size: 52px;
-      font-weight: 300;
-      line-height: 1.05;
-      color: $deep-brown;
-    }
+  @include below('lg') { min-height: 320px; order: -1; }
+  @include below('sm') { min-height: 260px; }
+}
 
-    .about-headline em {
-        font-style: italic;
-        color: $light-brown; 
-    }
+.about-hero-badge {
+  position: absolute;
+  bottom: 28px;
+  right: 28px;
+  background: $deep-brown;
+  color: $gold;
+  padding: 16px 20px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.8;
+  z-index: 2;
 
-    .about-sub {
-        font-size: 14px; 
-        color: $muted-text; 
-        line-height: 1.8;
-        font-weight: 300; 
-    }
+  @include below('sm') {
+    bottom: 16px;
+    right: 16px;
+    padding: 12px 14px;
+    font-size: 9px;
+  }
+}
 
-    /* ── STORY ── */
-    .story-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-    }
+.about-hero-text {
+  padding: 70px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
 
-    .story-img {
-      background: linear-gradient(135deg, $blush , $warm-tan);
-      height: 420px;
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-    }
+  @include below('lg') { padding: 48px 40px; }
+  @include below('sm') { padding: 40px 24px; gap: 14px; }
+}
 
-    .story-img-tag {
-      background: $white;
-      padding: 12px 18px;
-      margin: 20px;
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: $deep-brown;
-    }
+.about-headline {
+  font-family: $font-serif;
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1.05;
+  color: $deep-brown;
 
-    .gold-rule {
-        width: 44px; 
-        height: 2px; 
-        background: $gold;
-     }
+  em { font-style: italic; color: $light-brown; }
 
-    .story-text {
-        display: flex; 
-        flex-direction: column; 
-        gap: 20px; 
-    }
+  @include below('lg') { font-size: 42px; }
+  @include below('sm') { font-size: 34px; }
+}
 
-    .story-heading {
-      font-family: $font-serif;
-      font-size: 34px;
-      font-weight: 300;
-      color: $deep-brown;
-      line-height: 1.15;
-    }
+.about-sub {
+  font-size: 14px;
+  color: $muted-text;
+  line-height: 1.8;
+  font-weight: 300;
 
-    .story-heading em {
-        font-style: italic;
-        color: $light-brown;
-    }
+  @include below('sm') { font-size: 13px; }
+}
 
-    .story-p {
-        font-size: 13px;
-        color: $muted-text; 
-        line-height: 1.85; 
-        font-weight: 300; 
-    }
+// ── Story ─────────────────────────────────────────────────────────
+.story-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
 
-    /* ── PHILOSOPHY GRID ── */
-    .philosophy {
-      background: $deep-brown;
-      padding: 72px 60px;
-    }
+  @include below('lg') { grid-template-columns: 1fr; gap: 36px; }
+}
 
-    .philosophy-title {
-      font-family: $font-serif;
-      font-size: 40px;
-      color: $gold;
-      font-weight: 300;
-      text-align: center;
-      margin-bottom: 48px;
-    }
+.story-img {
+  background: linear-gradient(135deg, $blush, $warm-tan);
+  height: 420px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
 
-    .philosophy-title em { font-style: italic; }
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    z-index: 0;
+  }
 
-    .philosophy-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  @include below('lg') { height: 340px; }
+  @include below('sm') { height: 260px; }
+}
 
-    .phil-card {
-      border: 0.5px solid rgba(196,164,107,.25);
-      padding: 32px 24px;
-      text-align: center;
-      transition: border-color .2s;
-    }
+.story-img-tag {
+  background: $white;
+  padding: 12px 18px;
+  margin: 20px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $deep-brown;
+  position: relative;
+  z-index: 2;
+}
 
-    .phil-card:hover {
-        border-color: rgba(196,164,107,.6); 
-    }
+.gold-rule { width: 44px; height: 2px; background: $gold; }
 
-    .phil-icon {
-      font-size: 24px;
-      color: $gold;
-      margin-bottom: 14px;
-      line-height: 1;
-    }
-    .phil-name {
-      font-family: $font-serif;
-      font-size: 20px;
-      color: $gold;
-      font-weight: 400;
-      margin-bottom: 10px;
-    }
-    .phil-desc { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.75; }
+.story-text { display: flex; flex-direction: column; gap: 20px; }
 
-    /* ── SPECIALTIES ── */
-    .spec-grid { 
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap: 16px; margin-top: 36px; 
-    }
+.story-heading {
+  font-family: $font-serif;
+  font-size: 34px;
+  font-weight: 300;
+  color: $deep-brown;
+  line-height: 1.15;
 
-    .spec-item {
-      background: $white;
-      display: flex;
-      gap: 18px;
-      padding: 22px;
-      align-items: flex-start;
-      border: 0.5px solid $blush;
-      transition: border-color .2s;
-    }
+  em { font-style: italic; color: $light-brown; }
 
-    .spec-item:hover { 
-        border-color: $warm-tan; 
-    }
+  @include below('sm') { font-size: 26px; }
+}
 
-    .spec-num {
-      font-family: $font-serif;
-      font-size: 36px;
-      color: $blush;
-      font-weight: 300;
-      line-height: 1;
-      min-width: 40px;
-    }
+.story-p {
+  font-size: 13px;
+  color: $muted-text;
+  line-height: 1.85;
+  font-weight: 300;
+}
 
-    .spec-name {
-        font-size: 14px; 
-        font-weight: 500; 
-        color: $deep-brown; 
-        letter-spacing: .5px; 
-    }
+// ── Philosophy grid ───────────────────────────────────────────────
+.philosophy {
+  background: $deep-brown;
+  padding: 72px 60px;
 
-    .spec-desc { 
-        font-size: 12px;
-        color: $muted-text; 
-        margin-top: 5px; 
-        line-height: 1.65;
-    }
+  @include below('lg') { padding: 56px 40px; }
+  @include below('sm') { padding: 48px 24px; }
+}
 
-    /* ── TESTIMONIALS ── */
-    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 36px; }
+.philosophy-title {
+  font-family: $font-serif;
+  font-size: 40px;
+  color: $gold;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 48px;
 
-    .testi-card { border-top: 2px solid $warm-tan; padding-top: 20px; }
+  em { font-style: italic; }
 
-    .testi-stars { color: $gold; letter-spacing: 3px; font-size: 13px; margin-bottom: 10px; }
+  @include below('sm') { font-size: 30px; margin-bottom: 32px; }
+}
 
-    .testi-text { font-size: 13px; color: $muted-text; line-height: 1.7; font-style: italic; }
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 
-    .testi-name { 
-      font-size: 10px; 
-      letter-spacing: 2px; 
-      text-transform: uppercase; 
-      color: $brown; 
-      margin-top: 14px; 
-    }
+  @include below('lg') { grid-template-columns: repeat(2, 1fr); }
+  @include below('sm') { grid-template-columns: 1fr; gap: 16px; }
+}
 
-     .about-cta {
-      background: $cream;
-      padding: 80px 60px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
+.phil-card {
+  border: 0.5px solid rgba(196, 164, 107, 0.25);
+  padding: 32px 24px;
+  text-align: center;
+  transition: border-color 0.2s;
 
-    .cta-h {
-      font-family: $font-serif;
-      font-size: 44px;
-      font-weight: 300;
-      color: $deep-brown;
-      line-height: 1.1;
-    }
+  &:hover { border-color: rgba(196, 164, 107, 0.6); }
 
-    .cta-h em {
-      font-style: italic;
-       color: $light-brown;
-      }
+  @include below('sm') { padding: 24px 20px; }
+}
 
-    .cta-p {
-      font-size: 14px;
-      color: $muted-text;
-      max-width: 420px;
-      line-height: 1.7; 
-     }
+.phil-icon { font-size: 24px; color: $gold; margin-bottom: 14px; line-height: 1; }
+.phil-name { font-family: $font-serif; font-size: 20px; color: $gold; font-weight: 400; margin-bottom: 10px; }
+.phil-desc { font-size: 12px; color: rgba(255, 255, 255, 0.5); line-height: 1.75; }
+
+// ── Specialties ───────────────────────────────────────────────────
+.spec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 36px;
+
+  @include below('md') { grid-template-columns: 1fr; gap: 12px; }
+}
+
+.spec-item {
+  background: $white;
+  display: flex;
+  gap: 18px;
+  padding: 22px;
+  align-items: flex-start;
+  border: 0.5px solid $blush;
+  transition: border-color 0.2s;
+
+  &:hover { border-color: $warm-tan; }
+
+  @include below('sm') { padding: 18px; gap: 14px; }
+}
+
+.spec-num {
+  font-family: $font-serif;
+  font-size: 36px;
+  color: $blush;
+  font-weight: 300;
+  line-height: 1;
+  min-width: 40px;
+}
+
+.spec-name { font-size: 14px; font-weight: 500; color: $deep-brown; letter-spacing: 0.5px; }
+.spec-desc { font-size: 12px; color: $muted-text; margin-top: 5px; line-height: 1.65; }
+
+// ── Testimonials ──────────────────────────────────────────────────
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 36px;
+
+  @include below('lg') { grid-template-columns: repeat(2, 1fr); }
+  @include below('sm') { grid-template-columns: 1fr; gap: 20px; }
+}
+
+.testi-card { border-top: 2px solid $warm-tan; padding-top: 20px; }
+.testi-stars { color: $gold; letter-spacing: 3px; font-size: 13px; margin-bottom: 10px; }
+.testi-text { font-size: 13px; color: $muted-text; line-height: 1.7; font-style: italic; }
+.testi-name { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: $brown; margin-top: 14px; }
+
+// ── About CTA ─────────────────────────────────────────────────────
+.about-cta {
+  background: $cream;
+  padding: 80px 60px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  @include below('md') { padding: 56px 40px; }
+  @include below('sm') { padding: 48px 24px; gap: 16px; }
+}
+
+.cta-h {
+  font-family: $font-serif;
+  font-size: 44px;
+  font-weight: 300;
+  color: $deep-brown;
+  line-height: 1.1;
+
+  em { font-style: italic; color: $light-brown; }
+
+  @include below('md') { font-size: 34px; }
+  @include below('sm') { font-size: 28px; }
+}
+
+.cta-p {
+  font-size: 14px;
+  color: $muted-text;
+  max-width: 420px;
+  line-height: 1.7;
+
+  @include below('sm') { font-size: 13px; max-width: 100%; }
+}
