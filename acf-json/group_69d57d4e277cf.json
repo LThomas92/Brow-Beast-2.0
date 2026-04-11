@@ -17,7 +17,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_69d57d4ee5713",
@@ -94,7 +95,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_69d57ea39f384",
@@ -143,7 +145,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_69d5821152818",
@@ -185,7 +188,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_69d587ae2d586",
@@ -322,7 +326,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_69d58dea5ff1e",
@@ -446,7 +451,7 @@
             {
                 "param": "page",
                 "operator": "==",
-                "value": "6"
+                "value": "11"
             }
         ]
     ],
@@ -459,5 +464,8 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1775603746
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1775875228
 }

@@ -95,9 +95,9 @@
     "location": [
         [
             {
-                "param": "page",
+                "param": "page_template",
                 "operator": "==",
-                "value": "36"
+                "value": "page-services.php"
             }
         ]
     ],
@@ -113,5 +113,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1775789833
+    "modified": 1775875334
 }

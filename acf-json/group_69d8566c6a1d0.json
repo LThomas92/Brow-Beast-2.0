@@ -152,6 +152,7 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
+                    "parent_repeater": "field_69d856fedf326",
                     "sub_fields": [
                         {
                             "key": "field_69d85768df32a",
@@ -197,8 +198,7 @@
                             "new_lines": "",
                             "parent_repeater": "field_69d8573ddf329"
                         }
-                    ],
-                    "parent_repeater": "field_69d856fedf326"
+                    ]
                 }
             ]
         }
@@ -206,9 +206,9 @@
     "location": [
         [
             {
-                "param": "post_type",
+                "param": "page_template",
                 "operator": "==",
-                "value": "post"
+                "value": "page-faq.php"
             }
         ]
     ],
@@ -224,5 +224,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1775785918
+    "modified": 1775875799
 }

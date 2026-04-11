@@ -51,6 +51,11 @@
   span { color: $light-brown; }
   &:hover { opacity: 0.75; }
 
+  img {
+      max-height: calc(var(--logo-height, 56px) * 0.88);
+  width: auto;
+  }
+
   // Slightly smaller on tablet
   @include below('lg') {
     font-size: 17px;

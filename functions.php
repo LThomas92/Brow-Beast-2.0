@@ -133,10 +133,7 @@ function browbeast_scripts(): void {
 			'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 			'nonce'     => wp_create_nonce( 'browbeast_nonce' ),
 			'siteUrl'   => get_site_url(),
-			'acuityUrl' => get_theme_mod(
-				'browbeast_acuity_url',
-				'https://app.acuityscheduling.com/schedule.php?owner=19201786'
-			),
+			'acuityUrl' => get_theme_mod( 'browbeast_acuity_url' ) ?: 'https://app.acuityscheduling.com/schedule.php?owner=19201786',
 		],
 		JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
 	);
@@ -214,6 +211,36 @@ class Browbeast_Nav_Walker extends Walker_Nav_Menu {
 
 
 // ─────────────────────────────────────────────────────────────
+//  NAV WALKER — Footer
+// ─────────────────────────────────────────────────────────────
+class Browbeast_Footer_Walker extends Walker_Nav_Menu {
+
+	public function start_el( &$output, $data_object, $depth = 0, $args = null, $current_object_id = 0 ): void {
+		$item      = $data_object;
+		$classes   = empty( $item->classes ) ? [] : (array) $item->classes;
+		$classes[] = 'footer-link';
+
+		if ( in_array( 'current-menu-item', $classes, true ) ) {
+			$classes[] = 'active';
+		}
+
+		$output .= sprintf(
+			'<a href="%s" class="%s"%s%s>%s</a>',
+			esc_url( $item->url ?: '#' ),
+			esc_attr( implode( ' ', array_unique( array_filter( $classes ) ) ) ),
+			$item->target ? ' target="' . esc_attr( $item->target ) . '"' : '',
+			$item->xfn    ? ' rel="'    . esc_attr( $item->xfn )    . '"' : '',
+			esc_html( apply_filters( 'the_title', $item->title, $item->ID ) )
+		);
+	}
+
+	public function end_el( &$output, $data_object, $depth = 0, $args = null ): void {}
+	public function start_lvl( &$output, $depth = 0, $args = null ): void {}
+	public function end_lvl( &$output, $depth = 0, $args = null ): void {}
+}
+
+
+// ─────────────────────────────────────────────────────────────
 //  NAV WALKER — Mobile Drawer
 // ─────────────────────────────────────────────────────────────
 class Browbeast_Drawer_Walker extends Walker_Nav_Menu {
@@ -247,49 +274,58 @@ class Browbeast_Drawer_Walker extends Walker_Nav_Menu {
 // ─────────────────────────────────────────────────────────────
 add_action( 'customize_register', function ( WP_Customize_Manager $wp_customize ): void {
 
-	// Booking
+	// ── Booking ───────────────────────────────────────────────
 	$wp_customize->add_section( 'browbeast_booking', [
-		'title'    => esc_html__( 'Booking Settings', 'browbeast' ),
+		'title'    => 'Booking Settings',
 		'priority' => 30,
 	] );
+
+	// Store the default without special chars in the default —
+	// the ?owner= query string was causing JSON encoding issues
 	$wp_customize->add_setting( 'browbeast_acuity_url', [
-		'default'           => 'https://app.acuityscheduling.com/schedule.php?owner=19201786',
+		'default'           => '',
 		'sanitize_callback' => 'esc_url_raw',
 		'transport'         => 'refresh',
 	] );
+
 	$wp_customize->add_control( 'browbeast_acuity_url', [
-		'label'       => esc_html__( 'Acuity Booking URL', 'browbeast' ),
-		'description' => esc_html__( 'The full URL from your Acuity scheduling page.', 'browbeast' ),
+		'label'       => 'Acuity Booking URL',
+		'description' => 'Paste the full URL from your Acuity scheduling page.',
 		'section'     => 'browbeast_booking',
-		'type'        => 'url',
+		'type'        => 'text',
 	] );
 
-	// Instagram
+	// ── Instagram ─────────────────────────────────────────────
 	$wp_customize->add_section( 'browbeast_instagram', [
-		'title'    => esc_html__( 'Instagram Settings', 'browbeast' ),
+		'title'    => 'Instagram Settings',
 		'priority' => 35,
 	] );
+
 	$wp_customize->add_setting( 'browbeast_instagram_token', [
 		'default'           => '',
 		'sanitize_callback' => 'sanitize_text_field',
 		'transport'         => 'refresh',
 	] );
+
 	$wp_customize->add_control( 'browbeast_instagram_token', [
-		'label'       => esc_html__( 'Instagram Access Token', 'browbeast' ),
-		'description' => esc_html__( 'Long-lived token from Meta Basic Display API. Auto-refreshes every 50 days.', 'browbeast' ),
+		'label'       => 'Instagram Access Token',
+		'description' => 'Long-lived token from Meta Basic Display API.',
 		'section'     => 'browbeast_instagram',
-		'type'        => 'textarea',
+		'type'        => 'text',
 	] );
+
 	$wp_customize->add_setting( 'browbeast_instagram_count', [
 		'default'           => 6,
 		'sanitize_callback' => 'absint',
 	] );
+
 	$wp_customize->add_control( 'browbeast_instagram_count', [
-		'label'       => esc_html__( 'Number of posts to display', 'browbeast' ),
+		'label'       => 'Number of Instagram posts to display',
 		'section'     => 'browbeast_instagram',
 		'type'        => 'number',
 		'input_attrs' => [ 'min' => 3, 'max' => 12, 'step' => 1 ],
 	] );
+
 } );
 
 

@@ -35,7 +35,7 @@ export default {
     clean:     !DEV,   // don't wipe dist on every dev save — prevents missing CSS flash
   },
 
-  devtool: DEV ? 'eval-source-map' : 'hidden-source-map',
+  devtool: DEV ? 'source-map' : 'hidden-source-map',
 
   module: {
     rules: [

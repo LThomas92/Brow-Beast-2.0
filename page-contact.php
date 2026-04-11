@@ -8,33 +8,46 @@
  *    Title: Contact  |  Slug: contact
  *    Template: Contact Page
  *
+ * GRAVITY FORMS SETUP:
+ * 1. Install & activate Gravity Forms plugin
+ * 2. Forms → New Form → build your contact form
+ * 3. Note the form ID (shown in Forms list, e.g. "ID: 1")
+ * 4. Either:
+ *    a) Set ACF field "contact_gf_form_id" to that number, OR
+ *    b) Hard-code CONTACT_FORM_ID below as a fallback
+ *
  * ACF FIELDS — "Contact Page" field group
  * Location: Page Template == Contact Page
  *
- *   contact_tag          Text    e.g. "Get in Touch"
- *   contact_headline     Text    e.g. "We'd love to hear from you."
- *   contact_sub          Text    Supporting line
- *   contact_phone        Text    Phone number (plain text)
- *   contact_email        Email   Email address
- *   contact_address      Text    Street address
+ *   contact_tag          Text
+ *   contact_headline     Text
+ *   contact_sub          Text
+ *   contact_phone        Text
+ *   contact_email        Email
+ *   contact_address      Text
  *   contact_hours        Repeater → day_range (Text) + hours (Text)
- *   contact_map_embed    Textarea  Google Maps embed <iframe> code
+ *   contact_map_embed    Textarea  Google Maps <iframe> code
+ *   contact_gf_form_id   Number    Gravity Forms form ID
  */
 
 get_header();
 
-$tag      = get_field( 'contact_tag' )      ?: 'Get in Touch';
-$headline = get_field( 'contact_headline' ) ?: "We'd love to hear from you.";
-$sub      = get_field( 'contact_sub' )      ?: 'Have a question about a service? Ready to book? Reach out and Gabrielle will get back to you personally.';
-$phone    = get_field( 'contact_phone' )    ?: '516-840-7314';
-$email    = get_field( 'contact_email' )    ?: '';
-$address  = get_field( 'contact_address' )  ?: '2 Hicks Lane, Great Neck, NY 11024';
-$hours    = get_field( 'contact_hours' )    ?: [
-  [ 'day_range' => 'Tuesday – Friday',  'hours' => '10:00 AM – 7:00 PM' ],
-  [ 'day_range' => 'Saturday',          'hours' => '9:00 AM – 5:00 PM' ],
-  [ 'day_range' => 'Sunday – Monday',   'hours' => 'Closed' ],
+// ── Fallback form ID if ACF field isn't set ──────────────────────
+define( 'CONTACT_FORM_ID', 1 );
+
+$tag       = get_field( 'contact_tag' )       ?: 'Get in Touch';
+$headline  = get_field( 'contact_headline' )  ?: "We'd love to hear from you.";
+$sub       = get_field( 'contact_sub' )       ?: 'Have a question about a service? Ready to book? Reach out and Gabrielle will get back to you personally.';
+$phone     = get_field( 'contact_phone' )     ?: '516-840-7314';
+$email     = get_field( 'contact_email' )     ?: '';
+$address   = get_field( 'contact_address' )   ?: '2 Hicks Lane, Great Neck, NY 11024';
+$hours     = get_field( 'contact_hours' )     ?: [
+  [ 'day_range' => 'Tuesday – Friday', 'hours' => '10:00 AM – 7:00 PM' ],
+  [ 'day_range' => 'Saturday',         'hours' => '9:00 AM – 5:00 PM' ],
+  [ 'day_range' => 'Sunday – Monday',  'hours' => 'Closed' ],
 ];
 $map_embed = get_field( 'contact_map_embed' ) ?: '';
+$gf_id     = (int) ( get_field( 'contact_gf_form_id' ) ?: CONTACT_FORM_ID );
 ?>
 
 <!-- ── HERO BANNER ──────────────────────────────────────────────── -->
@@ -131,66 +144,30 @@ $map_embed = get_field( 'contact_map_embed' ) ?: '';
         <p class="contact-form-sub">Fill out the form and Gabrielle will get back to you within 24 hours.</p>
       </div>
 
-      <?php
-      // ── Using Contact Form 7 shortcode if installed
-      // Install CF7: Plugins → Add New → "Contact Form 7" → Install
-      // Then create a form and paste its shortcode below replacing [contact-form-7 ...]
-      if ( function_exists( 'wpcf7' ) ) :
-        echo do_shortcode( '[contact-form-7 id="your-form-id" title="Contact Form"]' );
-      else :
-        // ── Native HTML fallback form (processed via functions.php AJAX handler)
-      ?>
-      <form class="contact-form" id="contactForm" novalidate>
-        <?php wp_nonce_field( 'browbeast_contact', 'browbeast_nonce' ); ?>
+      <?php if ( class_exists( 'GFForms' ) ) : ?>
+        <?php
+        /**
+         * gravity_form( $id, $display_title, $display_description, $display_inactive, $field_values, $ajax, $tabindex )
+         *
+         * - $display_title / $display_description: false hides the GF form title/desc
+         *   since we already have our own header above.
+         * - $ajax: true submits without a full page reload (recommended).
+         */
+        gravity_form( $gf_id, false, false, false, null, true );
+        ?>
 
-        <div class="form-row form-row--two">
-          <div class="form-field">
-            <label for="contact_name">Name <span aria-hidden="true">*</span></label>
-            <input type="text" id="contact_name" name="contact_name" required autocomplete="name" placeholder="Your name">
-            <span class="form-error" aria-live="polite"></span>
+      <?php else : ?>
+        <!-- Gravity Forms not active — display an admin notice instead of a broken form -->
+        <?php if ( current_user_can( 'manage_options' ) ) : ?>
+          <div class="contact-form-notice" style="padding:1rem;background:#fff3cd;border:1px solid #ffc107;border-radius:6px;color:#856404;">
+            <strong>Admin notice:</strong> Gravity Forms is not installed or activated.
+            <a href="<?php echo esc_url( admin_url( 'plugin-install.php?s=gravity+forms&tab=search&type=term' ) ); ?>">
+              Install a plugin
+            </a> or activate Gravity Forms to display the contact form.
           </div>
-          <div class="form-field">
-            <label for="contact_email_field">Email <span aria-hidden="true">*</span></label>
-            <input type="email" id="contact_email_field" name="contact_email" required autocomplete="email" placeholder="your@email.com">
-            <span class="form-error" aria-live="polite"></span>
-          </div>
-        </div>
-
-        <div class="form-field">
-          <label for="contact_phone_field">Phone</label>
-          <input type="tel" id="contact_phone_field" name="contact_phone" autocomplete="tel" placeholder="(555) 000-0000">
-        </div>
-
-        <div class="form-field">
-          <label for="contact_service">Interested in</label>
-          <select id="contact_service" name="contact_service">
-            <option value="">Select a service (optional)</option>
-            <option>StrokeBlend™ Combo Brows</option>
-            <option>SoftBlend™ Ombré Brows</option>
-            <option>Henna Brows</option>
-            <option>Brow Waxing &amp; Shaping</option>
-            <option>Corrections</option>
-            <option>Other / General Question</option>
-          </select>
-        </div>
-
-        <div class="form-field">
-          <label for="contact_message">Message <span aria-hidden="true">*</span></label>
-          <textarea id="contact_message" name="contact_message" required rows="5" placeholder="Tell us a little about what you're looking for…"></textarea>
-          <span class="form-error" aria-live="polite"></span>
-        </div>
-
-        <button type="submit" class="btn-primary form-submit" id="formSubmit">
-          <span class="btn-label">Send Message</span>
-          <span class="btn-loading" hidden>Sending…</span>
-        </button>
-
-        <div class="form-success" id="formSuccess" hidden>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><polyline points="6.5 10.5 9 13 13.5 7.5"/></svg>
-          Message sent! Gabrielle will be in touch within 24 hours.
-        </div>
-
-      </form>
+        <?php else : ?>
+          <p>Our contact form is temporarily unavailable. Please reach us by phone or email using the details on this page.</p>
+        <?php endif; ?>
       <?php endif; ?>
 
     </div>
@@ -202,7 +179,6 @@ $map_embed = get_field( 'contact_map_embed' ) ?: '';
 <?php if ( $map_embed ) : ?>
 <div class="contact-map">
   <?php
-  // Only allow iframe tags from Google Maps
   $allowed = [ 'iframe' => [ 'src' => true, 'width' => true, 'height' => true,
     'style' => true, 'allowfullscreen' => true, 'loading' => true,
     'referrerpolicy' => true, 'title' => true ] ];

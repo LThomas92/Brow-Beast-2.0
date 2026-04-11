@@ -45,10 +45,13 @@
 }
 
 .footer-logo-img {
-  max-height: 48px;
+  display: inline-block;
+  margin-bottom: 2.5rem;
+  cursor: pointer;
+  img {
+  max-height: calc(var(--logo-height, 56px) * 0.88);
   width: auto;
-  margin-bottom: 16px;
-  opacity: 0.85;
+  }
 }
 
 .footer-text {
