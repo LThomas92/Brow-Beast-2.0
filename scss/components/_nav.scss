@@ -52,8 +52,8 @@
   &:hover { opacity: 0.75; }
 
   img {
-      max-height: calc(var(--logo-height, 56px) * 0.88);
-  width: auto;
+    max-height: calc(var(--logo-height, 56px) * 0.88);
+    width: auto;
   }
 
   // Slightly smaller on tablet
@@ -222,6 +222,10 @@
   color: $gold;
   font-weight: 300;
   text-decoration: none;
+  img {
+    max-height: calc(var(--logo-height, 56px) * 0.88);
+    width: auto;
+  }
 }
 
 .drawer-close {
