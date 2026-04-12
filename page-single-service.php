@@ -170,16 +170,33 @@ $gallery    = get_field( 'service_gallery' )    ?: [];
   <div class="tag" style="margin-bottom:8px;">Common questions</div>
   <h2 class="sec-title">FAQs</h2>
   <div class="faq-list" id="faqList">
-    <?php foreach ( $faqs as $i => $faq ) : ?>
-      <div class="faq-item" id="faq-<?php echo $i; ?>">
-        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-<?php echo $i; ?>">
-          <?php echo esc_html( $faq['faq_q'] ); ?>
-          <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <?php foreach ( $faqs as $i => $faq ) :
+      $q_id = 'faq-' . $i;
+      $a_id = 'faq-a-' . $i;
+    ?>
+      <div class="faq-item" id="<?php echo esc_attr( $q_id ); ?>">
+        <button
+          class="faq-q"
+          type="button"
+          aria-expanded="false"
+          aria-controls="<?php echo esc_attr( $a_id ); ?>"
+          id="btn-<?php echo esc_attr( $q_id ); ?>"
+        >
+          <span><?php echo esc_html( $faq['faq_q'] ); ?></span>
+          <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
             <polyline points="4 6 8 10 12 6"/>
           </svg>
         </button>
-        <div class="faq-a" id="faq-a-<?php echo $i; ?>" hidden>
-          <?php echo esc_html( $faq['faq_a'] ); ?>
+        <!-- No hidden attribute — max-height: 0 in CSS keeps it closed -->
+        <div
+          class="faq-a"
+          id="<?php echo esc_attr( $a_id ); ?>"
+          role="region"
+          aria-labelledby="btn-<?php echo esc_attr( $q_id ); ?>"
+        >
+          <div class="faq-a-inner">
+            <?php echo wp_kses_post( nl2br( esc_html( $faq['faq_a'] ) ) ); ?>
+          </div>
         </div>
       </div>
     <?php endforeach; ?>
@@ -231,3 +248,4 @@ $gallery    = get_field( 'service_gallery' )    ?: [];
 </section>
 
 <?php get_footer(); ?>
+
