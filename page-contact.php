@@ -179,6 +179,7 @@ $gf_id     = (int) ( get_field( 'contact_gf_form_id' ) ?: CONTACT_FORM_ID );
 <?php if ( $map_embed ) : ?>
 <div class="contact-map">
   <?php
+  // Only allow iframe tags from Google Maps
   $allowed = [ 'iframe' => [ 'src' => true, 'width' => true, 'height' => true,
     'style' => true, 'allowfullscreen' => true, 'loading' => true,
     'referrerpolicy' => true, 'title' => true ] ];
@@ -199,5 +200,5 @@ $gf_id     = (int) ( get_field( 'contact_gf_form_id' ) ?: CONTACT_FORM_ID );
   </a>
 </div>
 <?php endif; ?>
-
+ 
 <?php get_footer(); ?>

@@ -1,251 +1,321 @@
 @use '../index' as *;
 
-    .about-hero {
-        background: $cream;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        min-height: 480px;
-    }
+// ── Hero ──────────────────────────────────────────────────────────
+.about-hero {
+  background: $cream;
+  display: grid;
+  grid-template-columns: 1fr 1fr; // must be equal — no gap
+  gap: 0;                          // no gap between image and text
+  min-height: 480px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 
-    .about-hero-img {
-      background: linear-gradient(150deg, $blush) 0%, $warm-tan 50%, $brown 100%;
-      position: relative;
-      min-height: 420px;
-      display: flex;
-      align-items: flex-end;
-    }
+  @include below('')
 
-    .about-hero-badge {
-      position: absolute;
-      bottom: 28px; right: 28px;
-      background: $deep-brown;
-      color: $gold;
-      padding: 16px 20px;
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-align: center;
-      line-height: 1.8;
-    }
+  @include below('lg') { 
+    display: flex;
+    flex-direction: column; 
+}
+}
 
-    .about-hero-text {
-      padding: 70px 60px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 18px;
-    }
+// Image wrapper — aspect-ratio matches 1365x2048 so nothing crops
+.about-hero-img {
+  position: relative;
+  // overflow visible so badge is never clipped at edges
+  overflow: visible;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(150deg, $blush 0%, $warm-tan 55%, $brown 100%);
 
-    .about-headline {
-      font-family: $font-serif;
-      font-size: 52px;
-      font-weight: 300;
-      line-height: 1.05;
-      color: $deep-brown;
-    }
+  aspect-ratio: 1365 / 2048;
+  max-height: 680px;
 
-    .about-headline em {
-        font-style: italic;
-        color: $light-brown; 
-    }
+  // clip the photo itself but not the badge — use a child clip instead
+  &-clip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
 
-    .about-sub {
-        font-size: 14px; 
-        color: $muted-text; 
-        line-height: 1.8;
-        font-weight: 300; 
-    }
+  // Brand gradient overlay
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(150deg, $blush 0%, $warm-tan 55%, $brown 100%);
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 1;
+  }
 
-    /* ── STORY ── */
-    .story-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-    }
+  // Stack below text on smaller desktop — push breakpoint to 860px
+  @media (max-width: 860px) {
+    aspect-ratio: 1365 / 2048;
+    max-height: 460px;
+    order: -1;
+    overflow: hidden; // safe to clip when stacked
+  }
 
-    .story-img {
-      background: linear-gradient(135deg, $blush , $warm-tan);
-      height: 420px;
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-    }
+  @include below('sm') {
+    aspect-ratio: auto;
+    height: 340px;
+    max-height: none;
+  }
+}
 
-    .story-img-tag {
-      background: $white;
-      padding: 12px 18px;
-      margin: 20px;
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: $deep-brown;
-    }
+// The actual <img> tag
+.about-hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  z-index: 0;
+}
 
-    .gold-rule {
-        width: 44px; 
-        height: 2px; 
-        background: $gold;
-     }
+// Badge sits outside the overflow:hidden context so it's never clipped
+.about-hero-badge {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background: $deep-brown;
+  color: $gold;
+  padding: 14px 18px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.8;
+  z-index: 10; // above the ::after overlay
+  white-space: nowrap;
 
-    .story-text {
-        display: flex; 
-        flex-direction: column; 
-        gap: 20px; 
-    }
+  @include below('sm') { bottom: 14px; right: 14px; padding: 10px 12px; font-size: 9px; }
+}
 
-    .story-heading {
-      font-family: $font-serif;
-      font-size: 34px;
-      font-weight: 300;
-      color: $deep-brown;
-      line-height: 1.15;
-    }
+.about-hero-text {
+  padding: 56px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
 
-    .story-heading em {
-        font-style: italic;
-        color: $light-brown;
-    }
+  // Reduce padding as the columns narrow before they stack
+  @media (max-width: 1100px) { padding: 44px 36px; }
+  @media (max-width: 860px)  { padding: 40px 36px; }
+  @include below('sm') { padding: 36px 24px; gap: 14px; }
+}
 
-    .story-p {
-        font-size: 13px;
-        color: $muted-text; 
-        line-height: 1.85; 
-        font-weight: 300; 
-    }
+.about-headline {
+  font-family: $font-serif;
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1.05;
+  color: $deep-brown;
 
-    /* ── PHILOSOPHY GRID ── */
-    .philosophy {
-      background: $deep-brown;
-      padding: 72px 60px;
-    }
+  em { font-style: italic; color: $light-brown; }
 
-    .philosophy-title {
-      font-family: $font-serif;
-      font-size: 40px;
-      color: $gold;
-      font-weight: 300;
-      text-align: center;
-      margin-bottom: 48px;
-    }
+  @include below('lg') { font-size: 42px; }
+  @include below('sm') { font-size: 34px; }
+}
 
-    .philosophy-title em { font-style: italic; }
+.about-sub {
+  font-size: 14px;
+  color: $muted-text;
+  line-height: 1.8;
+  font-weight: 300;
+}
 
-    .philosophy-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
 
-    .phil-card {
-      border: 0.5px solid rgba(196,164,107,.25);
-      padding: 32px 24px;
-      text-align: center;
-      transition: border-color .2s;
-    }
+// ── Story ─────────────────────────────────────────────────────────
+.story-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start; // align to top so tall image doesn't stretch layout
 
-    .phil-card:hover {
-        border-color: rgba(196,164,107,.6); 
-    }
+  @media (max-width: 1100px) { grid-template-columns: 1fr; gap: 36px; }
+}
 
-    .phil-icon {
-      font-size: 24px;
-      color: $gold;
-      margin-bottom: 14px;
-      line-height: 1;
-    }
-    .phil-name {
-      font-family: $font-serif;
-      font-size: 20px;
-      color: $gold;
-      font-weight: 400;
-      margin-bottom: 10px;
-    }
-    .phil-desc { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.75; }
+// Image wrapper — tall enough to show the full subject
+.story-img {
+  background: linear-gradient(135deg, $blush, $warm-tan);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  // Tall container — shows more of the image
+  min-height: 640px;
 
-    /* ── SPECIALTIES ── */
-    .spec-grid { 
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap: 16px; margin-top: 36px; 
-    }
+  @media (max-width: 1100px) { min-height: 480px; }
+  @include below('sm') { min-height: 340px; }
+}
 
-    .spec-item {
-      background: $white;
-      display: flex;
-      gap: 18px;
-      padding: 22px;
-      align-items: flex-start;
-      border: 0.5px solid $blush;
-      transition: border-color .2s;
-    }
+// The actual <img> inside .story-img
+.story-img-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  // center 15% shows the upper portion — good for portrait shots
+  // showing face/body without cropping the top
+  object-position: center 15%;
+  z-index: 0;
+}
 
-    .spec-item:hover { 
-        border-color: $warm-tan; 
-    }
+.story-img-tag {
+  background: $white;
+  padding: 12px 18px;
+  margin: 20px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $deep-brown;
+  position: relative;
+  z-index: 2;
+}
 
-    .spec-num {
-      font-family: $font-serif;
-      font-size: 36px;
-      color: $blush;
-      font-weight: 300;
-      line-height: 1;
-      min-width: 40px;
-    }
+.gold-rule { width: 44px; height: 2px; background: $gold; }
 
-    .spec-name {
-        font-size: 14px; 
-        font-weight: 500; 
-        color: $deep-brown; 
-        letter-spacing: .5px; 
-    }
+.story-text { display: flex; flex-direction: column; gap: 20px; }
 
-    .spec-desc { 
-        font-size: 12px;
-        color: $muted-text; 
-        margin-top: 5px; 
-        line-height: 1.65;
-    }
+.story-heading {
+  font-family: $font-serif;
+  font-size: 34px;
+  font-weight: 300;
+  color: $deep-brown;
+  line-height: 1.15;
 
-    /* ── TESTIMONIALS ── */
-    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 36px; }
+  em { font-style: italic; color: $light-brown; }
 
-    .testi-card { border-top: 2px solid $warm-tan; padding-top: 20px; }
+  @include below('sm') { font-size: 26px; }
+}
 
-    .testi-stars { color: $gold; letter-spacing: 3px; font-size: 13px; margin-bottom: 10px; }
+.story-p { font-size: 13px; color: $muted-text; line-height: 1.85; font-weight: 300; }
 
-    .testi-text { font-size: 13px; color: $muted-text; line-height: 1.7; font-style: italic; }
 
-    .testi-name { 
-      font-size: 10px; 
-      letter-spacing: 2px; 
-      text-transform: uppercase; 
-      color: $brown; 
-      margin-top: 14px; 
-    }
+// ── Philosophy ────────────────────────────────────────────────────
+.philosophy {
+  background: $deep-brown;
+  padding: 72px 60px;
 
-     .about-cta {
-      background: $cream;
-      padding: 80px 60px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
+  @include below('lg') { padding: 56px 40px; }
+  @include below('sm') { padding: 48px 24px; }
+}
 
-    .cta-h {
-      font-family: $font-serif;
-      font-size: 44px;
-      font-weight: 300;
-      color: $deep-brown;
-      line-height: 1.1;
-    }
+.philosophy-title {
+  font-family: $font-serif;
+  font-size: 40px;
+  color: $gold;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 48px;
 
-    .cta-h em {
-      font-style: italic;
-       color: $light-brown;
-      }
+  em { font-style: italic; }
 
-    .cta-p {
-      font-size: 14px;
-      color: $muted-text;
-      max-width: 420px;
-      line-height: 1.7; 
-     }
+  @include below('sm') { font-size: 30px; margin-bottom: 32px; }
+}
+
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+
+  @include below('lg') { grid-template-columns: repeat(2, 1fr); }
+  @include below('sm') { grid-template-columns: 1fr; gap: 16px; }
+}
+
+.phil-card {
+  border: 0.5px solid rgba(196, 164, 107, 0.25);
+  padding: 32px 24px;
+  text-align: center;
+  transition: border-color 0.2s;
+
+  &:hover { border-color: rgba(196, 164, 107, 0.6); }
+}
+
+.phil-icon  { font-size: 24px; color: $gold; margin-bottom: 14px; line-height: 1; }
+.phil-name  { font-family: $font-serif; font-size: 20px; color: $gold; font-weight: 400; margin-bottom: 10px; }
+.phil-desc  { font-size: 12px; color: rgba(255, 255, 255, 0.5); line-height: 1.75; }
+
+
+// ── Specialties ───────────────────────────────────────────────────
+.spec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 36px;
+
+  @include below('md') { grid-template-columns: 1fr; gap: 12px; }
+}
+
+.spec-item {
+  background: $white;
+  display: flex;
+  gap: 18px;
+  padding: 22px;
+  align-items: flex-start;
+  border: 0.5px solid $blush;
+  transition: border-color 0.2s;
+
+  &:hover { border-color: $warm-tan; }
+}
+
+.spec-num  { font-family: $font-serif; font-size: 36px; color: $blush; font-weight: 300; line-height: 1; min-width: 40px; }
+.spec-name { font-size: 14px; font-weight: 500; color: $deep-brown; letter-spacing: 0.5px; }
+.spec-desc { font-size: 12px; color: $muted-text; margin-top: 5px; line-height: 1.65; }
+
+
+// ── Testimonials ──────────────────────────────────────────────────
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 36px;
+
+  @include below('lg') { grid-template-columns: repeat(2, 1fr); }
+  @include below('sm') { grid-template-columns: 1fr; gap: 20px; }
+}
+
+.testi-card  { border-top: 2px solid $warm-tan; padding-top: 20px; }
+.testi-stars { color: $gold; letter-spacing: 3px; font-size: 13px; margin-bottom: 10px; }
+.testi-text  { font-size: 13px; color: $muted-text; line-height: 1.7; font-style: italic; }
+.testi-name  { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: $brown; margin-top: 14px; }
+
+
+// ── CTA ───────────────────────────────────────────────────────────
+.about-cta {
+  background: $cream;
+  padding: 80px 60px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  @include below('md') { padding: 56px 40px; }
+  @include below('sm') { padding: 48px 24px; gap: 16px; }
+}
+
+.cta-h {
+  font-family: $font-serif;
+  font-size: 44px;
+  font-weight: 300;
+  color: $deep-brown;
+  line-height: 1.1;
+
+  em { font-style: italic; color: $light-brown; }
+
+  @include below('md') { font-size: 34px; }
+  @include below('sm') { font-size: 28px; }
+}
+
+.cta-p {
+  font-size: 14px;
+  color: $muted-text;
+  max-width: 420px;
+  line-height: 1.7;
+}

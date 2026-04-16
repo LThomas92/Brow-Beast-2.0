@@ -58,48 +58,8 @@
       if ( ! has_nav_menu( 'footer' ) ) : ?>
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
         <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'about' ) ) ); ?>">About</a>
-        <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'services' ) ) ); ?>">Services</a>
-        <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'gallery' ) ) ); ?>">Gallery</a>
-        <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'booking' ) ) ); ?>">Book Now</a>
-        <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'faq' ) ) ); ?>">FAQs</a>
+         <a href="<?php echo esc_url( get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' ) ); ?>" target="_blank" rel="noopener noreferrer">Book an Appointment</a>
       <?php endif; ?>
-    </div>
-  </div>
-
-  <!-- ── Services column — hardcoded, links to individual pages ── -->
-  <div class="footer-col">
-    <div class="footer-col-title">Services</div>
-    <div class="footer-links">
-      <?php
-      // Pull live from service pages so adding a new page auto-appears
-      $service_pages = get_pages( [
-        'meta_key'   => '_wp_page_template',
-        'meta_value' => 'page-single-service.php',
-        'sort_column'=> 'menu_order',
-      ] );
-
-      if ( ! empty( $service_pages ) ) :
-        foreach ( $service_pages as $svc ) : ?>
-          <a href="<?php echo esc_url( get_permalink( $svc->ID ) ); ?>">
-            <?php echo esc_html( $svc->post_title ); ?>
-          </a>
-        <?php endforeach;
-      else :
-        // Hardcoded fallback until pages are created
-        $services = [
-          'strokeblend-combo-brows' => 'StrokeBlend™ Combo',
-          'softblend-ombre-brows'   => 'SoftBlend™ Ombré',
-          'henna-brows'             => 'Henna Brows',
-          'brow-waxing'             => 'Brow Waxing',
-          'corrections'             => 'Corrections',
-        ];
-        foreach ( $services as $slug => $label ) :
-          $page = get_page_by_path( $slug );
-          $url  = $page ? get_permalink( $page->ID ) : home_url( '/services/' );
-        ?>
-          <a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $label ); ?></a>
-        <?php endforeach;
-      endif; ?>
     </div>
   </div>
 
@@ -109,8 +69,6 @@
     <div class="footer-links">
       <a href="https://www.instagram.com/thebrowbeast/" target="_blank" rel="noopener noreferrer">Instagram</a>
       <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'contact' ) ) ?: home_url( '/contact/' ) ); ?>">Contact Us</a>
-      <a href="<?php echo esc_url( get_permalink( get_page_by_path( 'faq' ) ) ?: home_url( '/faq/' ) ); ?>">FAQs</a>
-      <a href="<?php echo esc_url( get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' ) ); ?>" target="_blank" rel="noopener noreferrer">Book an Appointment</a>
     </div>
   </div>
 

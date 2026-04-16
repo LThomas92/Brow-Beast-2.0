@@ -115,22 +115,6 @@
             "return_format": "array"
         },
         {
-            "key": "field_69d57ed39f385",
-            "label": "Homepage Hero Services",
-            "name": "homepage_hero_services",
-            "aria-label": "",
-            "type": "link",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "array"
-        },
-        {
             "key": "field_69d581fc52817",
             "label": "Hero Image",
             "name": "",
@@ -467,5 +451,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1775875228
+    "modified": 1776380919
 }

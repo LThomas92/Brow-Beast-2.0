@@ -281,13 +281,14 @@
   display: inline-block;
   background: #5C3D2E !important;
   color: #F2EAE0 !important;
-  padding: 13px 28px;
-  font-size: 10px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
+  padding: 13px 28px !important;
+  font-size: 10px !important;
+  letter-spacing: 2.5px !important;
+  text-transform: uppercase !important;
   font-family: "Jost", sans-serif !important;
-  border: none;
-  transition: background 0.2s;
+  border: none !important;
+  transition: background 0.2s !important;
+  font-weight: 400 !important;
 }
 
 // ── Admin notice (Instagram not connected) ────────────────────────

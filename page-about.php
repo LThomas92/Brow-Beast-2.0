@@ -1,34 +1,75 @@
 <?php get_header(); ?>
 
 <section class="about-hero">
-  <?php 
-    $hero_image = get_field('about_hero_image');
-    $hero_badge = get_field('about_hero_badge');
-    $hero_tag   = get_field('about_hero_tag');
-    $hero_headline = get_field('about_hero_headline');
-    $hero_subline = get_field('about_hero_subline');
-    $hero_booking_btn = get_field('about_hero_booking');
+  <?php
+  $hero_image       = get_field( 'about_hero_image' );
+  $hero_badge       = get_field( 'about_hero_badge' );
+  $hero_tag         = get_field( 'about_hero_tag' );
+  $hero_headline    = get_field( 'about_hero_headline' );
+  $hero_subline     = get_field( 'about_hero_subline' );
+  $hero_booking_btn = get_field( 'about_hero_booking' );
   ?>
-  <div class="about-hero-img" <?php if ( $hero_image ) : ?> style="background-image: url('<?php echo esc_url( $hero_image['url'] ); ?>');"<?php endif; ?>>
-    <div class="about-hero-badge"><?php echo $hero_badge;?></div>
+
+  <!-- Image column — class is about-hero-img (the wrapper), img tag has its own class -->
+  <div class="about-hero-img">
+    <?php if ( $hero_image ) : ?>
+      <img
+        class="about-hero-photo"
+        src="<?php echo esc_url( $hero_image['sizes']['large'] ?? $hero_image['url'] ); ?>"
+        alt="<?php echo esc_attr( $hero_image['alt'] ); ?>"
+        loading="eager"
+      >
+    <?php endif; ?>
+
+    <?php if ( $hero_badge ) : ?>
+      <div class="about-hero-badge" style="z-index:2;">
+        <?php echo $hero_badge; ?>
+      </div>
+    <?php endif; ?>
   </div>
+
+  <!-- Text column -->
   <div class="about-hero-text">
-    <div class="tag"><?php echo $hero_tag; ?></div>
-    <h1 class="about-headline"><?php echo $hero_headline; ?></h1>
-    <p class="about-sub"><?php echo $hero_subline; ?></p>
-    <div style="margin-top:8px;">
-      <a href="<?php echo esc_url($hero_booking_btn['url']); ?>" class="btn-primary"><?php echo $hero_booking_btn['title']; ?></a>
-    </div>
+    <?php if ( $hero_tag ) : ?>
+      <div class="tag"><?php echo esc_html( $hero_tag ); ?></div>
+    <?php endif; ?>
+    <?php if ( $hero_headline ) : ?>
+      <h1 class="about-headline"><?php echo wp_kses_post( $hero_headline ); ?></h1>
+    <?php endif; ?>
+    <?php if ( $hero_subline ) : ?>
+      <p class="about-sub"><?php echo esc_html( $hero_subline ); ?></p>
+    <?php endif; ?>
+    <?php if ( $hero_booking_btn ) : ?>
+      <div style="margin-top:8px;">
+        <a href="<?php echo esc_url( $hero_booking_btn['url'] ); ?>"
+           class="btn-primary"
+           target="_blank"
+           rel="noopener noreferrer">
+          <?php echo esc_html( $hero_booking_btn['title'] ); ?>
+        </a>
+      </div>
+    <?php endif; ?>
   </div>
+
 </section>
 
+
+<!-- ── STORY ──────────────────────────────────────────────────────── -->
 <section class="section story-section">
-  <?php 
-    $studio_image = get_field('about_studio_image');
-  ?>
-  <div class="story-img" <?php if ( $studio_image ) : ?> style="background-image: url('<?php echo esc_url( $studio_image['url'] ); ?>');"<?php endif; ?>>
+  <?php $studio_image = get_field( 'about_studio_image' ); ?>
+
+  <div class="story-img">
+    <?php if ( $studio_image ) : ?>
+      <img
+        class="story-img-photo"
+        src="<?php echo esc_url( $studio_image['sizes']['large'] ?? $studio_image['url'] ); ?>"
+        alt="<?php echo esc_attr( $studio_image['alt'] ?: 'The Brow Beast Studio' ); ?>"
+        loading="lazy"
+      >
+    <?php endif; ?>
     <div class="story-img-tag">In the Studio</div>
   </div>
+
   <div class="story-text">
     <div class="gold-rule"></div>
     <h2 class="story-heading">The story<br>behind the <em>brand</em></h2>
@@ -38,6 +79,8 @@
   </div>
 </section>
 
+
+<!-- ── PHILOSOPHY ────────────────────────────────────────────────── -->
 <section class="philosophy">
   <h2 class="philosophy-title">The Brow Beast <em>Philosophy</em></h2>
   <div class="philosophy-grid">
@@ -59,6 +102,8 @@
   </div>
 </section>
 
+
+<!-- ── SPECIALTIES ───────────────────────────────────────────────── -->
 <section class="section">
   <div>
     <div class="tag" style="margin-bottom:8px;">Her craft</div>
@@ -84,6 +129,8 @@
   </div>
 </section>
 
+
+<!-- ── TESTIMONIALS ──────────────────────────────────────────────── -->
 <section class="section section--cream">
   <h2 class="sec-title">What clients <em>say</em></h2>
   <div class="testi-grid">
@@ -105,12 +152,17 @@
   </div>
 </section>
 
+
+<!-- ── CTA ───────────────────────────────────────────────────────── -->
 <div class="about-cta">
   <h2 class="cta-h">Ready to meet your<br><em>best brows?</em></h2>
   <p class="cta-p">Book your appointment with Gabrielle today and experience the difference of working with a true brow specialist.</p>
-  <a href="<?php echo esc_url( get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' ) ); ?>" class="btn-primary">Book Your Appointment</a>
+  <a href="<?php echo esc_url( get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' ) ); ?>"
+     class="btn-primary"
+     target="_blank"
+     rel="noopener noreferrer">
+    Book Your Appointment
+  </a>
 </div>
-
-
 
 <?php get_footer(); ?>

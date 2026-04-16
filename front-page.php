@@ -48,10 +48,7 @@
         class="hero-image-img"
         src="<?php echo esc_url( $hero_image['url'] ); ?>"
         alt="<?php echo esc_attr( $hero_image['alt'] ); ?>"
-        loading="eager"
-        width="<?php echo esc_attr( $hero_image['sizes']['large-width'] ); ?>"
-        height="<?php echo esc_attr( $hero_image['sizes']['large-height'] ); ?>"
-      >
+        loading="eager">
     <?php endif; ?>
     <div class="hero-image-label">Gabrielle Lowe · The Brow Beast</div>
   </div>
@@ -156,7 +153,7 @@
       $page_url = $page ? get_permalink( $page->ID ) : get_permalink( get_page_by_path( 'services' ) );
     ?>
 
-      <a href="<?php echo esc_url( $page_url ); ?>" class="svc-card svc-card--link">
+      <div class="svc-card svc-card--link">
         <div class="svc-img<?php echo $has_image ? ' has-image' : ''; ?>"
              <?php if ( $has_image ) : ?>
                style="background-image: url('<?php echo esc_url( $img_url ); ?>');"
@@ -177,7 +174,7 @@
           <div class="svc-price"><?php echo esc_html( $svc['price'] ); ?></div>
           <div class="svc-learn">Learn more →</div>
         </div>
-      </a>
+      </div>
 
     <?php endforeach; ?>
   </div>

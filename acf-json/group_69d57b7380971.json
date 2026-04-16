@@ -139,7 +139,8 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "array"
+            "return_format": "array",
+            "allow_in_bindings": 1
         },
         {
             "key": "field_69d87504f7cb3",
@@ -191,7 +192,7 @@
             {
                 "param": "page",
                 "operator": "==",
-                "value": "108"
+                "value": "6"
             }
         ]
     ],
@@ -207,5 +208,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1775870512
+    "modified": 1776375035
 }
