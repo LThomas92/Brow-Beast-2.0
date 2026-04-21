@@ -112,7 +112,7 @@
   <div class="spec-grid">
     <div class="spec-item">
       <div class="spec-num">01</div>
-      <div><div class="spec-name">StrokeBlend™ Combo Brows</div><div class="spec-desc">Gabrielle's signature blend of microblading and powder — natural strokes with lasting dimension.</div></div>
+      <div><div class="spec-name">StrokeBlend™ Combo Brows</div><div class="spec-desc">Gabrielle's signature blend of nanoblading and powder — natural strokes with lasting dimension.</div></div>
     </div>
     <div class="spec-item">
       <div class="spec-num">02</div>

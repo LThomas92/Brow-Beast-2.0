@@ -4,8 +4,7 @@
  */
 get_header();
 $booking_url  = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' );
-$services_url = get_permalink( get_page_by_path( 'services' ) ) ?: home_url( '/services/' );
-$gallery_url  = get_permalink( get_page_by_path( 'gallery' ) )  ?: home_url( '/gallery/' );
+$course_url = get_permalink( get_page_by_path( 'course' ) ) ?: home_url( '/course/' );
 $contact_url  = get_permalink( get_page_by_path( 'contact' ) )  ?: home_url( '/contact/' );
 ?>
 
@@ -45,18 +44,18 @@ $contact_url  = get_permalink( get_page_by_path( 'contact' ) )  ?: home_url( '/c
           <div class="nfl-sub">Back to the beginning</div>
         </div>
       </a>
-      <a href="<?php echo esc_url( $services_url ); ?>" class="not-found-link">
+      <a target="_blank" href="<?php echo esc_url( $booking_url ); ?>" class="not-found-link">
         <div class="nfl-icon">✦</div>
         <div>
           <div class="nfl-name">Services</div>
           <div class="nfl-sub">Browse all brow services</div>
         </div>
       </a>
-      <a href="<?php echo esc_url( $gallery_url ); ?>" class="not-found-link">
+      <a href="<?php echo esc_url( $course_url ); ?>" class="not-found-link">
         <div class="nfl-icon">◈</div>
         <div>
-          <div class="nfl-name">Gallery</div>
-          <div class="nfl-sub">Before & after transformations</div>
+          <div class="nfl-name">Course</div>
+          <div class="nfl-sub">Learn about our course</div>
         </div>
       </a>
       <a href="<?php echo esc_url( $contact_url ); ?>" class="not-found-link">

@@ -27,7 +27,7 @@ $booking_url = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityschedul
       <p>All appointments are booked through our online scheduling system (Acuity Scheduling). By completing a booking, you confirm that you have read and agree to these terms.</p>
       <ul>
         <li>A <strong>deposit is required</strong> at the time of booking to secure your appointment. The deposit amount is displayed during the booking process and is applied toward your total service cost on the day.</li>
-        <li>You must be at least <strong>18 years of age</strong> to book semi-permanent brow services. Clients aged 16–17 may book with written parental or guardian consent provided at the appointment.</li>
+        <li>You must be at least <strong>18 years of age</strong> to book semi-permanent brow services. Clients aged 16–17 can't book any service with me or without parental consent.</li>
         <li>A brief <strong>consultation</strong> is conducted at the start of every appointment to confirm suitability, discuss the desired outcome, and review any contraindications. The Studio reserves the right to decline service if a client is deemed unsuitable at the consultation stage. In such cases, the deposit will be refunded.</li>
         <li>By booking, you confirm that you have reviewed the <strong>contraindications</strong> listed on the relevant service page and that none apply to you. If you are unsure, please contact us before booking.</li>
       </ul>
@@ -36,8 +36,10 @@ $booking_url = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityschedul
     <section class="legal-section">
       <h2>2. Cancellation &amp; Rescheduling Policy</h2>
       <ul>
+        <li>All deposits are non-refundable.
         <li>Cancellations or reschedules must be made at least <strong>48 hours before</strong> your appointment to receive a refund of your deposit or to transfer it to a new appointment date.</li>
-        <li>Cancellations made <strong>less than 48 hours before</strong> the appointment will result in <strong>forfeiture of the deposit</strong>. No exceptions, including illness, unless a medical certificate is provided.</li>
+        <li>When rescheduling - to have your depoist transferred to a new appointment date, you must contact us directly via email or phone with a minimum of 48 hours notice before your scheduled appointment.</li>
+        <li>Cancellations made <strong>less than 48 hours before</strong> your appointment – or cancellations without intent to reschedule – will result in <strong>forfeiture of the deposit</strong>. No exceptions, including illness, unless a medical certificate is provided.</li>
         <li><strong>No-shows</strong> (failure to attend without notice) will result in forfeiture of the full deposit and may require a new deposit to rebook.</li>
         <li>The Studio reserves the right to cancel or reschedule appointments due to illness, emergency, or circumstances beyond our control. In such cases, a full refund of the deposit or a complimentary reschedule will be offered.</li>
         <li>Repeated late cancellations may result in a requirement to prepay the full service cost at the time of booking.</li>
@@ -51,24 +53,6 @@ $booking_url = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityschedul
         <li>Arrivals more than <strong>15 minutes late</strong> may result in a shortened service or the appointment being cancelled at the Studio's discretion.</li>
         <li>If your appointment is cancelled due to late arrival, your deposit will be forfeited.</li>
         <li>If you are running late, please contact us as soon as possible so we can do our best to accommodate you.</li>
-      </ul>
-    </section>
-
-    <section class="legal-section">
-      <h2>4. Pricing &amp; Payment</h2>
-      <ul>
-        <li>All prices shown on this website are <strong>starting prices</strong>. Final pricing may vary based on the complexity of the service, corrections required, or add-ons discussed at your consultation. Pricing will be confirmed before any work begins.</li>
-        <li>Payment is due in full at the time of your appointment. We accept cash and major credit/debit cards. Personal checks are not accepted.</li>
-        <li>Prices are subject to change without notice. The price confirmed at time of booking will be honoured for that appointment.</li>
-      </ul>
-    </section>
-
-    <section class="legal-section">
-      <h2>5. Touch-Up Appointments</h2>
-      <ul>
-        <li>A complimentary touch-up appointment is included with <strong>StrokeBlend™ Combo Brows</strong> when attended within <strong>6–8 weeks</strong> of the initial appointment. Touch-ups attended outside this window may be subject to a fee.</li>
-        <li>Touch-up pricing for other services is listed on the relevant service pages and at the time of booking.</li>
-        <li>The Studio is not responsible for premature fading caused by failure to follow aftercare instructions, lifestyle factors (excessive sun exposure, swimming, use of exfoliants), or skin type.</li>
       </ul>
     </section>
 

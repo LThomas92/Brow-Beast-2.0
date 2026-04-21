@@ -42,9 +42,9 @@ $phone     = get_field( 'contact_phone' )     ?: '516-840-7314';
 $email     = get_field( 'contact_email' )     ?: '';
 $address   = get_field( 'contact_address' )   ?: '2 Hicks Lane, Great Neck, NY 11024';
 $hours     = get_field( 'contact_hours' )     ?: [
-  [ 'day_range' => 'Tuesday – Friday', 'hours' => '10:00 AM – 7:00 PM' ],
+  [ 'day_range' => 'Monday – Friday', 'hours' => '9:00 AM – 5:00 PM' ],
   [ 'day_range' => 'Saturday',         'hours' => '9:00 AM – 5:00 PM' ],
-  [ 'day_range' => 'Sunday – Monday',  'hours' => 'Closed' ],
+  [ 'day_range' => 'Sunday',  'hours' => 'Closed' ],
 ];
 $map_embed = get_field( 'contact_map_embed' ) ?: '';
 $gf_id     = (int) ( get_field( 'contact_gf_form_id' ) ?: CONTACT_FORM_ID );
