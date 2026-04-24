@@ -13,12 +13,10 @@
 //Components
 @use 'components/nav';
 @use 'components/hero';
-@use 'components/before-after';
-@use 'components/testimonials';
-@use 'components/instagram';
 @use 'components/footer';
 @use 'components/buttons';
 @use 'components/legal';
+@use 'components/instagram-embed';
 
 // Pages
 @use 'pages/front-page';

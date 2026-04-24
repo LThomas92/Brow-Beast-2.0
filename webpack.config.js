@@ -1,146 +1,79 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import * as sass from 'sass';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import AssetsPlugin from 'assets-webpack-plugin';
-import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
-import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
+const path                  = require( 'path' );
+const MiniCssExtractPlugin  = require( 'mini-css-extract-plugin' );
+const { WebpackManifestPlugin } = require( 'webpack-manifest-plugin' );
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
+module.exports = ( env, argv ) => {
+  const isDev = argv.mode !== 'production';
 
-const DEV  = process.env.NODE_ENV !== 'production';
-const HASH = DEV ? '' : '-[contenthash:8]';
+  return {
+    entry: {
+      main: [
+        './src/index.js',
+        './scss/main.scss',
+      ],
+    },
 
-// ─── Update to match your local WordPress dev URL ───────────────
-const LOCAL_URL = 'http://localhost:8888/the-brow-beast';
+    output: {
+      path:          path.resolve( __dirname, 'dist' ),
+      filename:      'js/[name].[contenthash:8].js',
+      clean:         true,
+    },
 
-export default {
-  mode: DEV ? 'development' : 'production',
+    // ── KEY CHANGE ──────────────────────────────────────────────
+    // eval-source-map uses eval() with unicode in strings — this
+    // breaks WordPress Customizer's strict JS parser.
+    // source-map writes a separate .map file instead — no eval(),
+    // no unicode escape issues, Customizer loads fine.
+    devtool: isDev ? 'source-map' : false,
 
-  // ── Entry: scss lives at theme-root/scss/ so import from there ─
-  // Both JS and SCSS are entry points — Webpack handles both.
-  entry: {
-    main: [
-      './src/index.js',
-      './scss/main.scss',   // explicit SCSS entry — always writes a CSS file
-    ],
-  },
-
-  output: {
-    path:      path.resolve(__dirname, 'dist'),
-    filename:  `js/[name]${HASH}.js`,
-    publicPath: '/dist/',
-    clean:     !DEV,   // don't wipe dist on every dev save — prevents missing CSS flash
-  },
-
-  devtool: DEV ? 'source-map' : 'hidden-source-map',
-
-  module: {
-    rules: [
-      // ── JavaScript / ES6+ ───────────────────────────────────────
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/preset-env', {
-                targets: '> 0.5%, last 2 versions, not dead',
-                useBuiltIns: 'usage',
-                corejs: 3,
-              }],
-            ],
-          },
+    module: {
+      rules: [
+        // JS
+        {
+          test:    /\.js$/,
+          exclude: /node_modules/,
+          use:     { loader: 'babel-loader' },
         },
-      },
-
-      // ── SCSS → CSS ──────────────────────────────────────────────
-      // MiniCssExtractPlugin is used in BOTH dev and prod.
-      // style-loader injects CSS via JS (no file written) — that's
-      // why styles never appeared in dev mode. Extracting to a real
-      // .css file means functions.php can always enqueue it.
-      {
-        test: /\.scss$/,
-        use: [
-          MiniCssExtractPlugin.loader,   // always extract — never style-loader
-          {
-            loader: 'css-loader',
-            options: { sourceMap: DEV },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: { plugins: ['autoprefixer'] },
-              sourceMap: DEV,
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              implementation: sass,
-              api: 'modern',
-              sourceMap: DEV,
-              sassOptions: {
-                outputStyle: DEV ? 'expanded' : 'compressed',
+        // SCSS
+        {
+          test: /\.scss$/,
+          use:  [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            'postcss-loader',
+            {
+              loader:  'sass-loader',
+              options: {
+                api: 'modern',
+                implementation: require( 'sass' ),
               },
             },
-          },
-        ],
-      },
+          ],
+        },
+      ],
+    },
 
-      // ── Images ──────────────────────────────────────────────────
-      {
-        test: /\.(png|jpg|jpeg|gif|svg|webp)$/i,
-        type: 'asset/resource',
-        generator: { filename: 'images/[name][hash][ext]' },
-      },
-
-      // ── Fonts ───────────────────────────────────────────────────
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
-        generator: { filename: 'fonts/[name][hash][ext]' },
-      },
+    plugins: [
+      new MiniCssExtractPlugin( {
+        filename: 'css/[name].[contenthash:8].css',
+      } ),
+      new WebpackManifestPlugin( {
+        fileName:   'assets.json',
+        publicPath: '',
+        filter:     ( file ) => file.name === 'main.js' || file.name === 'main.css',
+        generate:   ( seed, files ) => {
+          const out = { main: {} };
+          files.forEach( f => {
+            if ( f.name === 'main.js'  ) out.main.js  = f.path;
+            if ( f.name === 'main.css' ) out.main.css = f.path;
+          } );
+          return out;
+        },
+      } ),
     ],
-  },
 
-  optimization: {
-    minimizer: [
-      new TerserPlugin({ extractComments: false }),
-      new CssMinimizerPlugin(),
-    ],
-  },
-
-  plugins: [
-    // Always extract CSS to a real file in both dev and prod
-    new MiniCssExtractPlugin({
-      filename: `css/style${HASH}.css`,
-    }),
-
-    // Writes dist/assets.json for functions.php to read hashed filenames
-    new AssetsPlugin({
-      path:     path.resolve(__dirname, 'dist'),
-      filename: 'assets.json',
-      fullPath: false,
-    }),
-
-    new BrowserSyncPlugin(
-      {
-        host:  'localhost',
-        port:  3000,
-        proxy: LOCAL_URL,
-        files: [
-          '**/*.php',
-          'dist/**/*.css',
-          'dist/**/*.js',
-        ],
-        notify: false,
-        open:   false,
-      },
-      { reload: true }   // full reload required — MiniCssExtractPlugin writes a real file, HMR can't patch it
-    ),
-  ],
+    resolve: {
+      extensions: [ '.js', '.scss' ],
+    },
+  };
 };

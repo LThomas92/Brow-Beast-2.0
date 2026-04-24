@@ -254,21 +254,21 @@
 .spec-name { font-size: 14px; font-weight: 500; color: $deep-brown; letter-spacing: 0.5px; }
 .spec-desc { font-size: 12px; color: $muted-text; margin-top: 5px; line-height: 1.65; }
 
-// ── Testimonials ──────────────────────────────────────────────────
-.testi-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 36px;
+// // ── Testimonials ──────────────────────────────────────────────────
+// .testi-grid {
+//   display: grid;
+//   grid-template-columns: repeat(3, 1fr);
+//   gap: 24px;
+//   margin-top: 36px;
 
-  @include below('lg') { grid-template-columns: repeat(2, 1fr); }
-  @include below('sm') { grid-template-columns: 1fr; gap: 20px; }
-}
+//   @include below('lg') { grid-template-columns: repeat(2, 1fr); }
+//   @include below('sm') { grid-template-columns: 1fr; gap: 20px; }
+// }
 
-.testi-card { border-top: 2px solid $warm-tan; padding-top: 20px; }
-.testi-stars { color: $gold; letter-spacing: 3px; font-size: 13px; margin-bottom: 10px; }
-.testi-text { font-size: 13px; color: $muted-text; line-height: 1.7; font-style: italic; }
-.testi-name { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: $brown; margin-top: 14px; }
+// .testi-card { border-top: 2px solid $warm-tan; padding-top: 20px; }
+// .testi-stars { color: $gold; letter-spacing: 3px; font-size: 13px; margin-bottom: 10px; }
+// .testi-text { font-size: 13px; color: $muted-text; line-height: 1.7; font-style: italic; }
+// .testi-name { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: $brown; margin-top: 14px; }
 
 // ── About CTA ─────────────────────────────────────────────────────
 .about-cta {

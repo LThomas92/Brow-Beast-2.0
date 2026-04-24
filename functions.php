@@ -170,6 +170,111 @@ add_filter( 'http_request_timeout', function( $timeout ) {
 
 
 // ─────────────────────────────────────────────────────────────
+//  GOOGLE ANALYTICS
+// ─────────────────────────────────────────────────────────────
+add_action( 'wp_head', function(): void {
+	$ga_id = 'G-XXXXXXXXXX'; // ← replace with your Measurement ID
+	if ( empty( $ga_id ) || $ga_id === 'G-XXXXXXXXXX' ) return;
+	?>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $ga_id ); ?>"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', '<?php echo esc_attr( $ga_id ); ?>');
+	</script>
+	<?php
+}, 1 );
+
+
+// ─────────────────────────────────────────────────────────────
+//  GOOGLE ANALYTICS
+// ─────────────────────────────────────────────────────────────
+add_action( 'wp_head', function(): void {
+	$ga_id = 'G-206GLLLKJL';
+	?>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $ga_id ); ?>"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', '<?php echo esc_attr( $ga_id ); ?>');
+	</script>
+	<?php
+}, 1 );
+
+
+// ─────────────────────────────────────────────────────────────
+//  SOCIAL META CARDS (Open Graph + Twitter/X)
+//  Outputs og: and twitter: tags for rich link previews on
+//  Facebook, Instagram, Twitter/X, iMessage, Slack, WhatsApp etc.
+// ─────────────────────────────────────────────────────────────
+add_action( 'wp_head', function(): void {
+
+	// ── Defaults (used on pages with no specific data) ────────
+	$site_name    = 'The Brow Beast';
+	$default_desc = 'Expert eyebrow artistry in Great Neck, NY. Microblading, henna brows, waxing & more by Gabrielle Lowe.';
+	$default_img  = get_template_directory_uri() . '/assets/social-card.jpg'; // 1200x630 image — see note below
+	$site_url     = home_url( '/' );
+	$twitter_handle = '@thebrowbeast';
+
+	// ── Page-specific values ──────────────────────────────────
+	if ( is_singular() ) {
+		$title = get_the_title() . ' — ' . $site_name;
+		$url   = get_permalink();
+
+		// Use ACF meta description if set, fall back to excerpt then default
+		$desc = get_field( 'meta_description' ) ?: get_the_excerpt() ?: $default_desc;
+		$desc = wp_strip_all_tags( $desc );
+
+		// Use featured image if set, fall back to default social card
+		$img = get_the_post_thumbnail_url( get_the_ID(), 'large' ) ?: $default_img;
+
+	} elseif ( is_home() || is_front_page() ) {
+		$title = $site_name . ' — Expert Eyebrow Artistry, Great Neck NY';
+		$url   = $site_url;
+		$desc  = $default_desc;
+		$img   = $default_img;
+
+	} else {
+		$title = wp_title( '—', false, 'right' ) . $site_name;
+		$url   = home_url( $_SERVER['REQUEST_URI'] );
+		$desc  = $default_desc;
+		$img   = $default_img;
+	}
+
+	// Truncate description to 160 chars
+	$desc = mb_strlen( $desc ) > 160 ? mb_substr( $desc, 0, 157 ) . '...' : $desc;
+	?>
+
+	<!-- ── Open Graph (Facebook, Instagram, WhatsApp, Slack, iMessage) -->
+	<meta property="og:type"        content="website">
+	<meta property="og:site_name"   content="<?php echo esc_attr( $site_name ); ?>">
+	<meta property="og:title"       content="<?php echo esc_attr( $title ); ?>">
+	<meta property="og:description" content="<?php echo esc_attr( $desc ); ?>">
+	<meta property="og:url"         content="<?php echo esc_url( $url ); ?>">
+	<meta property="og:image"       content="<?php echo esc_url( $img ); ?>">
+	<meta property="og:image:width"  content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt"    content="<?php echo esc_attr( $site_name ); ?>">
+	<meta property="og:locale"       content="en_US">
+
+	<!-- ── Twitter / X Card -->
+	<meta name="twitter:card"        content="summary_large_image">
+	<meta name="twitter:site"        content="<?php echo esc_attr( $twitter_handle ); ?>">
+	<meta name="twitter:title"       content="<?php echo esc_attr( $title ); ?>">
+	<meta name="twitter:description" content="<?php echo esc_attr( $desc ); ?>">
+	<meta name="twitter:image"       content="<?php echo esc_url( $img ); ?>">
+	<meta name="twitter:image:alt"   content="<?php echo esc_attr( $site_name ); ?>">
+
+	<!-- ── Standard meta description (SEO) -->
+	<meta name="description" content="<?php echo esc_attr( $desc ); ?>">
+
+	<?php
+}, 5 );
+
+
+// ─────────────────────────────────────────────────────────────
 //  REMOVE WORDPRESS JUNK FROM <HEAD>
 // ─────────────────────────────────────────────────────────────
 remove_action( 'wp_head', 'wp_generator' );
@@ -587,6 +692,72 @@ function browbeast_instagram_feed( int $count = 0, bool $header = true ): void {
 		</div>
 	<?php endif;
 }
+
+
+// ─────────────────────────────────────────────────────────────
+//  GOOGLE ANALYTICS
+// ─────────────────────────────────────────────────────────────
+add_action( 'wp_head', function(): void {
+	$ga_id = 'G-206GLLLKJL';
+	?>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $ga_id ); ?>"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', '<?php echo esc_attr( $ga_id ); ?>');
+	</script>
+	<?php
+}, 1 );
+
+
+// ─────────────────────────────────────────────────────────────
+//  SOCIAL META CARDS (Open Graph + Twitter/X)
+// ─────────────────────────────────────────────────────────────
+add_action( 'wp_head', function(): void {
+
+	$site_name    = 'The Brow Beast';
+	$default_desc = 'Expert eyebrow artistry in Great Neck, NY. Microblading, henna brows, waxing and more by Gabrielle Lowe.';
+	$default_img  = get_template_directory_uri() . '/assets/social-card.jpg';
+	$site_url     = home_url( '/' );
+
+	if ( is_singular() ) {
+		$title = get_the_title() . ' — ' . $site_name;
+		$url   = get_permalink();
+		$desc  = get_field( 'meta_description' ) ?: wp_strip_all_tags( get_the_excerpt() ) ?: $default_desc;
+		$img   = get_the_post_thumbnail_url( get_the_ID(), 'large' ) ?: $default_img;
+	} elseif ( is_home() || is_front_page() ) {
+		$title = $site_name . ' — Expert Eyebrow Artistry, Great Neck NY';
+		$url   = $site_url;
+		$desc  = $default_desc;
+		$img   = $default_img;
+	} else {
+		$title = wp_title( '—', false, 'right' ) . $site_name;
+		$url   = home_url( $_SERVER['REQUEST_URI'] );
+		$desc  = $default_desc;
+		$img   = $default_img;
+	}
+
+	$desc = mb_strlen( $desc ) > 160 ? mb_substr( $desc, 0, 157 ) . '...' : $desc;
+	?>
+	<meta property="og:type"         content="website">
+	<meta property="og:site_name"    content="<?php echo esc_attr( $site_name ); ?>">
+	<meta property="og:title"        content="<?php echo esc_attr( $title ); ?>">
+	<meta property="og:description"  content="<?php echo esc_attr( $desc ); ?>">
+	<meta property="og:url"          content="<?php echo esc_url( $url ); ?>">
+	<meta property="og:image"        content="<?php echo esc_url( $img ); ?>">
+	<meta property="og:image:width"  content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt"    content="<?php echo esc_attr( $site_name ); ?>">
+	<meta property="og:locale"       content="en_US">
+	<meta name="twitter:card"        content="summary_large_image">
+	<meta name="twitter:site"        content="@thebrowbeast">
+	<meta name="twitter:title"       content="<?php echo esc_attr( $title ); ?>">
+	<meta name="twitter:description" content="<?php echo esc_attr( $desc ); ?>">
+	<meta name="twitter:image"       content="<?php echo esc_url( $img ); ?>">
+	<meta name="description"         content="<?php echo esc_attr( $desc ); ?>">
+	<?php
+}, 5 );
 
 
 // ─────────────────────────────────────────────────────────────

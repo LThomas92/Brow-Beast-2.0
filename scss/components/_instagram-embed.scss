@@ -1,0 +1,58 @@
+@use '../index' as *;
+
+.insta-embed-wrap {
+  width: 100%;
+
+  // LightWidget's internal container — override its column count
+  // by targeting the widget's responsive breakpoints
+  .lightwidget-widget {
+    width: 100% !important;
+  }
+
+  // LightWidget uses an <iframe> — make it responsive
+  iframe {
+    width: 100% !important;
+  }
+}
+
+// ── Fallback placeholder grid (shown before embed is added) ───────
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-top: 28px;
+
+  @include below('lg') { grid-template-columns: repeat(4, 1fr); }
+  @include below('sm') { grid-template-columns: repeat(3, 1fr); }
+}
+
+.insta-cell {
+  aspect-ratio: 1;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+
+  > div {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.25s;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.25s;
+    display: block;
+  }
+
+  &:hover > div,
+  &:hover img { transform: scale(1.05); }
+}
+
+.ig1 { background: linear-gradient(135deg, #C9A882, #896C54); }
+.ig2 { background: linear-gradient(135deg, #E8D5C4, #B06F44); }
+.ig3 { background: linear-gradient(150deg, #F2EAE0, #C9A882); }
+.ig4 { background: linear-gradient(140deg, #D4B896, #5C3D2E); }
+.ig5 { background: linear-gradient(160deg, #ddc9b5, #B06F44); }
+.ig6 { background: linear-gradient(130deg, #F2EAE0, #7A5C40); }

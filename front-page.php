@@ -104,7 +104,6 @@
 
   <div class="services-grid">
     <?php
-    // Service slugs must match the page slugs in WP Admin
     $services = [
       [
         'image' => $svcImage1,
@@ -144,38 +143,31 @@
       ],
     ];
 
+    $booking_url = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' );
+
     foreach ( $services as $svc ) :
       $has_image = ! empty( $svc['image'] );
       $img_url   = $has_image ? $svc['image']['url'] : '';
-
-      // Resolve the individual service page URL
-      $page     = get_page_by_path( $svc['slug'] );
-      $page_url = $page ? get_permalink( $page->ID ) : get_permalink( get_page_by_path( 'services' ) );
     ?>
-
-      <div class="svc-card svc-card--link">
+      <a href="<?php echo esc_url( $booking_url ); ?>" class="svc-card svc-card--link" target="_blank" rel="noopener noreferrer">
         <div class="svc-img<?php echo $has_image ? ' has-image' : ''; ?>"
              <?php if ( $has_image ) : ?>
                style="background-image: url('<?php echo esc_url( $img_url ); ?>');"
              <?php endif; ?>>
-
           <?php if ( ! $has_image ) : ?>
             <div class="svc-img-fill <?php echo esc_attr( $svc['fill'] ); ?>"></div>
           <?php endif; ?>
-
           <?php if ( $svc['badge'] ) : ?>
             <div class="svc-badge"><?php echo esc_html( $svc['badge'] ); ?></div>
           <?php endif; ?>
-
         </div>
         <div class="svc-info">
           <div class="svc-name"><?php echo wp_kses_post( $svc['name'] ); ?></div>
           <div class="svc-desc"><?php echo esc_html( $svc['desc'] ); ?></div>
           <div class="svc-price"><?php echo esc_html( $svc['price'] ); ?></div>
-          <div class="svc-learn">Learn more →</div>
+          <div class="svc-learn">Book Now →</div>
         </div>
-      </div>
-
+      </a>
     <?php endforeach; ?>
   </div>
 </section>
@@ -187,6 +179,82 @@
   <blockquote class="quote-text">"Beauty is in the details and I'm here to make yours unforgettable."</blockquote>
   <div class="quote-line"></div>
   <p class="quote-author">— Gabrielle Lowe, The Brow Beast</p>
+</div>
+
+
+<!-- ═══ INSTAGRAM FEED ══════════════════════════════════════════ -->
+<section class="section section--cream">
+
+  <div class="insta-handle">Follow @thebrowbeast</div>
+  <h2 class="sec-title" style="display:inline-block;margin-bottom:28px;">Our <em>Instagram</em></h2>
+
+  <?php
+  // Check for a LightWidget (or any third-party) embed code saved in ACF.
+  // ACF field: homepage_instagram_embed (Textarea)
+  // Paste the full LightWidget <script> + <div> snippet into that field.
+  $instagram_embed = get_field( 'homepage_instagram_embed' );
+  ?>
+
+  <?php if ( $instagram_embed ) : ?>
+    <div class="insta-embed-wrap">
+      <?php
+      // Allow script and the LightWidget div — wp_kses strips scripts by default
+      // so we use echo directly. The field is admin-only so XSS risk is minimal.
+      // Wrap in output buffering to avoid whitespace issues.
+      echo $instagram_embed; // phpcs:ignore WordPress.Security.EscapeOutput
+      ?>
+    </div>
+
+  <?php elseif ( function_exists( 'browbeast_instagram_feed' ) && get_theme_mod( 'browbeast_instagram_token' ) ) : ?>
+    <?php browbeast_instagram_feed( 6, false ); // API fallback if token is set ?>
+
+  <?php else : ?>
+    <!-- Placeholder shown until embed code is added -->
+    <div class="insta-grid">
+      <?php for ( $i = 1; $i <= 6; $i++ ) : ?>
+        <a href="https://www.instagram.com/thebrowbeast/"
+           class="insta-cell"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Visit The Brow Beast on Instagram">
+          <div class="ig<?php echo $i; ?>"></div>
+        </a>
+      <?php endfor; ?>
+    </div>
+    <?php if ( current_user_can( 'manage_options' ) ) : ?>
+      <p style="margin-top:16px;font-size:12px;color:#7A6358;">
+        <strong>Admin:</strong> Add a LightWidget embed code to the
+        <a href="<?php echo esc_url( admin_url( 'post.php?post=' . get_the_ID() . '&action=edit' ) ); ?>">
+          homepage ACF field "homepage_instagram_embed"
+        </a> to show the live Instagram feed.
+      </p>
+    <?php endif; ?>
+  <?php endif; ?>
+
+  <div style="margin-top:28px;">
+    <a href="https://www.instagram.com/thebrowbeast/"
+       class="btn-ghost"
+       target="_blank"
+       rel="noopener noreferrer">
+      Follow on Instagram
+    </a>
+  </div>
+
+</section>
+
+
+<!-- ═══ BOOKING CTA ═════════════════════════════════════════════ -->
+<div class="cta-banner">
+  <div>
+    <div class="cta-title">Ready for your<br><em>best brows?</em></div>
+    <p class="cta-sub">Book your appointment with Gabrielle today. Every brow is crafted with precision, passion, and a deep love for the craft.</p>
+  </div>
+  <a href="<?php echo esc_url( get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' ) ); ?>"
+     class="btn-gold"
+     target="_blank"
+     rel="noopener noreferrer">
+    Book Now
+  </a>
 </div>
 
 

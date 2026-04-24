@@ -130,29 +130,6 @@
 </section>
 
 
-<!-- ── TESTIMONIALS ──────────────────────────────────────────────── -->
-<section class="section section--cream">
-  <h2 class="sec-title">What clients <em>say</em></h2>
-  <div class="testi-grid">
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Great service! Gab is always professional and has a beautiful spirit."</p>
-      <div class="testi-name">— Benita Moore</div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Her technique, precision and shaping is perfect. I receive so many compliments on my eyebrows."</p>
-      <div class="testi-name">— Antoinette</div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"The salon's aesthetics are beautiful and very comfortable. Every time I leave I feel amazing."</p>
-      <div class="testi-name">— Gabrielle James</div>
-    </div>
-  </div>
-</section>
-
-
 <!-- ── CTA ───────────────────────────────────────────────────────── -->
 <div class="about-cta">
   <h2 class="cta-h">Ready to meet your<br><em>best brows?</em></h2>
