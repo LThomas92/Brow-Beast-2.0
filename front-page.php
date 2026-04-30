@@ -109,7 +109,7 @@
         'image' => $svcImage1,
         'badge' => 'Signature',
         'name'  => 'StrokeBlend™ Combo Brows',
-        'desc'  => 'Microblading meets powder for the most natural, full look.',
+        'desc'  => 'Nanoblading meets powder for the most natural, full look.',
         'price' => 'From $895',
         'fill'  => 'si-1',
         'slug'  => 'strokeblend-combo-brows',
