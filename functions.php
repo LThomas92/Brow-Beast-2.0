@@ -173,24 +173,6 @@ add_filter( 'http_request_timeout', function( $timeout ) {
 //  GOOGLE ANALYTICS
 // ─────────────────────────────────────────────────────────────
 add_action( 'wp_head', function(): void {
-	$ga_id = 'G-XXXXXXXXXX'; // ← replace with your Measurement ID
-	if ( empty( $ga_id ) || $ga_id === 'G-XXXXXXXXXX' ) return;
-	?>
-	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $ga_id ); ?>"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	  gtag('config', '<?php echo esc_attr( $ga_id ); ?>');
-	</script>
-	<?php
-}, 1 );
-
-
-// ─────────────────────────────────────────────────────────────
-//  GOOGLE ANALYTICS
-// ─────────────────────────────────────────────────────────────
-add_action( 'wp_head', function(): void {
 	$ga_id = 'G-206GLLLKJL';
 	?>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $ga_id ); ?>"></script>
@@ -694,21 +676,7 @@ function browbeast_instagram_feed( int $count = 0, bool $header = true ): void {
 }
 
 
-// ─────────────────────────────────────────────────────────────
-//  GOOGLE ANALYTICS
-// ─────────────────────────────────────────────────────────────
-add_action( 'wp_head', function(): void {
-	$ga_id = 'G-206GLLLKJL';
-	?>
-	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $ga_id ); ?>"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	  gtag('config', '<?php echo esc_attr( $ga_id ); ?>');
-	</script>
-	<?php
-}, 1 );
+
 
 
 // ─────────────────────────────────────────────────────────────
@@ -759,6 +727,78 @@ add_action( 'wp_head', function(): void {
 	<?php
 }, 5 );
 
+
+
+// ─────────────────────────────────────────────────────────────
+//  ACF FIELD GROUPS — Programmatic Registration
+//  Registers all ACF fields in code so they don't rely on
+//  the database and work across all environments.
+// ─────────────────────────────────────────────────────────────
+add_action( 'init', 'browbeast_register_acf_fields', 20 );
+
+function browbeast_register_acf_fields(): void {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+
+	// ── Homepage Services Repeater ────────────────────────────
+	acf_add_local_field_group( [
+		'key'      => 'group_homepage_services',
+		'title'    => 'Homepage — Service Cards',
+		'fields'   => [
+			[
+				'key'        => 'field_homepage_services',
+				'label'      => 'Service Cards',
+				'name'       => 'homepage_services',
+				'type'       => 'repeater',
+				'min'        => 1,
+				'max'        => 6,
+				'layout'     => 'block',
+				'button_label' => 'Add Service Card',
+				'sub_fields' => [
+					[
+						'key'   => 'field_svc_name',
+						'label' => 'Service Name',
+						'name'  => 'svc_name',
+						'type'  => 'text',
+					],
+					[
+						'key'   => 'field_svc_desc',
+						'label' => 'Description',
+						'name'  => 'svc_desc',
+						'type'  => 'textarea',
+						'rows'  => 2,
+					],
+					[
+						'key'   => 'field_svc_price',
+						'label' => 'Price',
+						'name'  => 'svc_price',
+						'type'  => 'text',
+						'placeholder' => 'From $895',
+					],
+					[
+						'key'   => 'field_svc_badge',
+						'label' => 'Badge (optional)',
+						'name'  => 'svc_badge',
+						'type'  => 'text',
+						'placeholder' => 'e.g. Signature — leave blank for none',
+					],
+					[
+						'key'           => 'field_svc_image',
+						'label'         => 'Service Image',
+						'name'          => 'svc_image',
+						'type'          => 'image',
+						'return_format' => 'array',
+						'preview_size'  => 'medium',
+					],
+				],
+			],
+		],
+		'location' => [
+			[ [ 'param' => 'page_type', 'operator' => '==', 'value' => 'front_page' ] ],
+		],
+		'menu_order' => 10,
+		'style'      => 'default',
+	] );
+}
 
 // ─────────────────────────────────────────────────────────────
 //  INCLUDES

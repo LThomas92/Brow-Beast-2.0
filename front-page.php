@@ -82,72 +82,36 @@
 
 <!-- ═══ SERVICES ════════════════════════════════════════════════ -->
 <section class="section">
-  <?php
-  $servicesBtn = get_field( 'services_button' );
-  $svcImage1   = get_field( 'service_image_1' );
-  $svcImage2   = get_field( 'service_image_2' );
-  $svcImage3   = get_field( 'service_image_3' );
-  $svcImage4   = get_field( 'service_image_4' );
-  ?>
 
   <div class="sec-header">
     <div>
       <div class="tag" style="margin-bottom:8px;">What we offer</div>
       <h2 class="sec-title">Featured <em>Services</em></h2>
     </div>
-    <?php if ( $servicesBtn ) : ?>
-      <a href="<?php echo esc_url( $servicesBtn['url'] ); ?>" class="link-underline">
-        <?php echo esc_html( $servicesBtn['title'] ); ?>
-      </a>
-    <?php endif; ?>
   </div>
 
-  <div class="services-grid">
-    <?php
+  <?php
+  $booking_url = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' );
+  $services    = get_field( 'homepage_services' );
+
+  // Fallback hardcoded defaults if ACF repeater hasn't been filled yet
+  if ( empty( $services ) ) {
     $services = [
-      [
-        'image' => $svcImage1,
-        'badge' => 'Signature',
-        'name'  => 'StrokeBlend™ Combo Brows',
-        'desc'  => 'Nanoblading meets powder for the most natural, full look.',
-        'price' => 'From $895',
-        'fill'  => 'si-1',
-        'slug'  => 'strokeblend-combo-brows',
-      ],
-      [
-        'image' => $svcImage2,
-        'badge' => '',
-        'name'  => 'SoftBlend™ Ombré Brows',
-        'desc'  => 'Soft powdered gradient brows with lasting definition.',
-        'price' => 'From $850',
-        'fill'  => 'si-2',
-        'slug'  => 'softblend-ombre-brows',
-      ],
-      [
-        'image' => $svcImage3,
-        'badge' => '',
-        'name'  => 'Henna Brows',
-        'desc'  => 'Natural tinting with up to 2 weeks of beautiful, worry-free color.',
-        'price' => 'From $140',
-        'fill'  => 'si-3',
-        'slug'  => 'henna-brows',
-      ],
-      [
-        'image' => $svcImage4,
-        'badge' => '',
-        'name'  => 'Brow Waxing &amp; Shaping',
-        'desc'  => 'Precise shaping to define and frame your natural features.',
-        'price' => 'From $40',
-        'fill'  => 'si-4',
-        'slug'  => 'brow-waxing',
-      ],
+      [ 'svc_name' => 'StrokeBlend™ Combo Brows',  'svc_desc' => 'Nanoblading meets powder for the most natural, full look.',         'svc_price' => 'From $895', 'svc_badge' => 'Signature', 'svc_image' => null ],
+      [ 'svc_name' => 'SoftBlend™ Ombré Brows',    'svc_desc' => 'Soft powdered gradient brows with lasting definition.',             'svc_price' => 'From $850', 'svc_badge' => '',          'svc_image' => null ],
+      [ 'svc_name' => 'Henna Brows',                'svc_desc' => 'Natural tinting with up to 2 weeks of beautiful, worry-free color.','svc_price' => 'From $140', 'svc_badge' => '',          'svc_image' => null ],
+      [ 'svc_name' => 'Brow Waxing &amp; Shaping', 'svc_desc' => 'Precise shaping to define and frame your natural features.',        'svc_price' => 'From $40',  'svc_badge' => '',          'svc_image' => null ],
     ];
+  }
 
-    $booking_url = get_theme_mod( 'browbeast_acuity_url', 'https://app.acuityscheduling.com/schedule.php?owner=19201786' );
+  $fills = [ 'si-1', 'si-2', 'si-3', 'si-4' ];
+  ?>
 
-    foreach ( $services as $svc ) :
-      $has_image = ! empty( $svc['image'] );
-      $img_url   = $has_image ? $svc['image']['url'] : '';
+  <div class="services-grid">
+    <?php foreach ( $services as $i => $svc ) :
+      $has_image = ! empty( $svc['svc_image'] );
+      $img_url   = $has_image ? $svc['svc_image']['url'] : '';
+      $fill      = $fills[ $i % count( $fills ) ];
     ?>
       <a href="<?php echo esc_url( $booking_url ); ?>" class="svc-card svc-card--link" target="_blank" rel="noopener noreferrer">
         <div class="svc-img<?php echo $has_image ? ' has-image' : ''; ?>"
@@ -155,21 +119,22 @@
                style="background-image: url('<?php echo esc_url( $img_url ); ?>');"
              <?php endif; ?>>
           <?php if ( ! $has_image ) : ?>
-            <div class="svc-img-fill <?php echo esc_attr( $svc['fill'] ); ?>"></div>
+            <div class="svc-img-fill <?php echo esc_attr( $fill ); ?>"></div>
           <?php endif; ?>
-          <?php if ( $svc['badge'] ) : ?>
-            <div class="svc-badge"><?php echo esc_html( $svc['badge'] ); ?></div>
+          <?php if ( ! empty( $svc['svc_badge'] ) ) : ?>
+            <div class="svc-badge"><?php echo esc_html( $svc['svc_badge'] ); ?></div>
           <?php endif; ?>
         </div>
         <div class="svc-info">
-          <div class="svc-name"><?php echo wp_kses_post( $svc['name'] ); ?></div>
-          <div class="svc-desc"><?php echo esc_html( $svc['desc'] ); ?></div>
-          <div class="svc-price"><?php echo esc_html( $svc['price'] ); ?></div>
+          <div class="svc-name"><?php echo wp_kses_post( $svc['svc_name'] ); ?></div>
+          <div class="svc-desc"><?php echo esc_html( $svc['svc_desc'] ); ?></div>
+          <div class="svc-price"><?php echo esc_html( $svc['svc_price'] ); ?></div>
           <div class="svc-learn">Book Now →</div>
         </div>
       </a>
     <?php endforeach; ?>
   </div>
+
 </section>
 
 
@@ -188,28 +153,17 @@
   <div class="insta-handle">Follow @thebrowbeast</div>
   <h2 class="sec-title" style="display:inline-block;margin-bottom:28px;">Our <em>Instagram</em></h2>
 
-  <?php
-  // Check for a LightWidget (or any third-party) embed code saved in ACF.
-  // ACF field: homepage_instagram_embed (Textarea)
-  // Paste the full LightWidget <script> + <div> snippet into that field.
-  $instagram_embed = get_field( 'homepage_instagram_embed' );
-  ?>
+  <?php $instagram_embed = get_field( 'homepage_instagram_embed' ); ?>
 
   <?php if ( $instagram_embed ) : ?>
     <div class="insta-embed-wrap">
-      <?php
-      // Allow script and the LightWidget div — wp_kses strips scripts by default
-      // so we use echo directly. The field is admin-only so XSS risk is minimal.
-      // Wrap in output buffering to avoid whitespace issues.
-      echo $instagram_embed; // phpcs:ignore WordPress.Security.EscapeOutput
-      ?>
+      <?php echo $instagram_embed; // phpcs:ignore WordPress.Security.EscapeOutput ?>
     </div>
 
   <?php elseif ( function_exists( 'browbeast_instagram_feed' ) && get_theme_mod( 'browbeast_instagram_token' ) ) : ?>
-    <?php browbeast_instagram_feed( 6, false ); // API fallback if token is set ?>
+    <?php browbeast_instagram_feed( 6, false ); ?>
 
   <?php else : ?>
-    <!-- Placeholder shown until embed code is added -->
     <div class="insta-grid">
       <?php for ( $i = 1; $i <= 6; $i++ ) : ?>
         <a href="https://www.instagram.com/thebrowbeast/"

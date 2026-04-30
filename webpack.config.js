@@ -1,5 +1,5 @@
-const path                  = require( 'path' );
-const MiniCssExtractPlugin  = require( 'mini-css-extract-plugin' );
+const path                    = require( 'path' );
+const MiniCssExtractPlugin    = require( 'mini-css-extract-plugin' );
 const { WebpackManifestPlugin } = require( 'webpack-manifest-plugin' );
 
 module.exports = ( env, argv ) => {
@@ -14,16 +14,13 @@ module.exports = ( env, argv ) => {
     },
 
     output: {
-      path:          path.resolve( __dirname, 'dist' ),
-      filename:      'js/[name].[contenthash:8].js',
-      clean:         true,
+      path:     path.resolve( __dirname, 'dist' ),
+      filename: 'js/[name].[contenthash:8].js',
+      clean:    true,
     },
 
-    // ── KEY CHANGE ──────────────────────────────────────────────
-    // eval-source-map uses eval() with unicode in strings — this
-    // breaks WordPress Customizer's strict JS parser.
-    // source-map writes a separate .map file instead — no eval(),
-    // no unicode escape issues, Customizer loads fine.
+    // source-map in dev  — separate .map file, no eval(), Customizer works
+    // false in production — no source maps, smaller bundle, no source exposure
     devtool: isDev ? 'source-map' : false,
 
     module: {
@@ -37,14 +34,14 @@ module.exports = ( env, argv ) => {
         // SCSS
         {
           test: /\.scss$/,
-          use:  [
+          use: [
             MiniCssExtractPlugin.loader,
             'css-loader',
             'postcss-loader',
             {
               loader:  'sass-loader',
               options: {
-                api: 'modern',
+                api:            'modern',
                 implementation: require( 'sass' ),
               },
             },
@@ -58,10 +55,10 @@ module.exports = ( env, argv ) => {
         filename: 'css/[name].[contenthash:8].css',
       } ),
       new WebpackManifestPlugin( {
-        fileName:   'assets.json',
+        fileName:  'assets.json',
         publicPath: '',
-        filter:     ( file ) => file.name === 'main.js' || file.name === 'main.css',
-        generate:   ( seed, files ) => {
+        filter:    ( file ) => file.name === 'main.js' || file.name === 'main.css',
+        generate:  ( seed, files ) => {
           const out = { main: {} };
           files.forEach( f => {
             if ( f.name === 'main.js'  ) out.main.js  = f.path;
@@ -74,6 +71,11 @@ module.exports = ( env, argv ) => {
 
     resolve: {
       extensions: [ '.js', '.scss' ],
+    },
+
+    // Dev server / watch mode optimisations
+    watchOptions: {
+      ignored: /node_modules/,
     },
   };
 };
